@@ -13,3 +13,7 @@ This repo is for my finall assignment for my python cource in university. This i
 - Pygame-ce 2.5.5
   `pip install pygame-ce`
 - Download the "Assets" folder
+
+# Devlog
+## Jul 20th 2025
+Finally managed to make eggs to passively spawn each 5 seconds, without stopping the whole program. Now it just needs some polishing.

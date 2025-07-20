@@ -1,4 +1,4 @@
-import pygame, Button_Class
+import pygame, Button_Class, time
 pygame.init()
 
 Window_Width, Window_Height = 360, 360
@@ -9,14 +9,18 @@ Screen.fill((BGGrey))
 
 fps = pygame.time.Clock()
 IMG = pygame.image.load
+# Maybe put ui elements image files inside another py file?
+Click_Img_Def = IMG('Assets/UI/Btn_Def_Action.png').convert_alpha()
+Click_Img_Prs = IMG('Assets/UI/Btn_Prs_Action.png').convert_alpha()
 
-Click_Img = IMG('Assets/UI/Btn_Def_Action.png').convert_alpha()
-Exit_Img = IMG('Assets/UI/Exit_Btn.png').convert_alpha()
+Exit_Img_Def = IMG('Assets/UI/Btn_Def_Exit.png').convert_alpha()
+Exit_Img_Prs = IMG('Assets/UI/Btn_Prs_Exit.png').convert_alpha()
+
 Score_Img = IMG('Assets/UI/Score.png').convert_alpha()
 Chick_Img = IMG('Assets/Aseprite files/Chicken.png').convert_alpha()
 
-Click_Btn = Button_Class.Button(36, 280, Click_Img, 1)
-Exit_Btn = Button_Class.Button(260, 280, Exit_Img, 1)
+Click_Btn = Button_Class.Button(36, 280, Click_Img_Def, 1)
+Exit_Btn = Button_Class.Button(260, 280, Exit_Img_Def, 1)
 
 Chicken_x = 82
 Chicken_y = 84
@@ -25,15 +29,21 @@ Amount_Of_Eggs = 0
 Run = True #Condition to run while loop
 
 def Button_Logic():
-    global Run, Amount_Of_Eggs, Click_Img, Exit_Img
+    global Run, Amount_Of_Eggs
 
     if Click_Btn.draw(Screen):
         Amount_Of_Eggs += 1
-    #else:
-        #Click_Img = pygame.image.load('Assets/UI/Btn_Def_Action.png').convert_alpha()
+        Click_Btn.image = Click_Img_Prs
+    else:
+        Click_Btn.image = Click_Img_Def
+        pygame.time.delay(150)
 
     if Exit_Btn.draw(Screen):
+        Exit_Btn.image = Exit_Img_Prs
         Run = False
+    else:
+        Exit_Btn.image = Exit_Img_Def
+        pygame.time.delay(150)
 
 def Game_Text():
     global Amount_Of_Eggs

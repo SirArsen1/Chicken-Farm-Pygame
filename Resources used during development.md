@@ -1,0 +1,6 @@
+
+- Pygame documentation https://www.pygame.org/docs/
+- https://hackernoon.com/how-to-fix-the-python-typeerror-int-object-is-not-tterable
+- https://stackoverflow.com/questions/11904981/local-variable-referenced-before-assignment
+- https://www.digitalocean.com/community/tutorials/python-time-sleep
+- https://stackoverflow.com/questions/62164580/how-to-sleep-in-one-function-without-sleeping-the-whole-program
