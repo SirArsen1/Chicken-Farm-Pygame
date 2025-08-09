@@ -1,4 +1,4 @@
-import pygame, Button_Class
+import pygame, Button_Class_01
 pygame.init()
 
 Window_Width, Window_Height = 360, 360

@@ -1,4 +1,4 @@
-import pygame, Button_Class, time
+import pygame, Button_Class_01, time
 pygame.init()
 
 Window_Width, Window_Height = 360, 360

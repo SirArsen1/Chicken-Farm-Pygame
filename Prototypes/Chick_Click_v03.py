@@ -1,4 +1,4 @@
-import pygame, Button_Class
+import pygame, Button_Class_01
 pygame.init()
 
 Window_Width, Window_Height = 360, 360
@@ -15,8 +15,8 @@ Exit_Img = IMG('Assets/UI/Exit_Btn.png').convert_alpha()
 Score_Img = IMG('Assets/UI/Score.png').convert_alpha()
 Chick_Img = IMG('Assets/Aseprite files/Chicken.png').convert_alpha()
 
-Click_Btn = Button_Class.Button(36, 280, Click_Img, 1)
-Exit_Btn = Button_Class.Button(260, 280, Exit_Img, 1)
+Click_Btn = Button_Class_01.Button(36, 280, Click_Img, 1)
+Exit_Btn = Button_Class_01.Button(260, 280, Exit_Img, 1)
 
 Chicken_x = 82
 Chicken_y = 84

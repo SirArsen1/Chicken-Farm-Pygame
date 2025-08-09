@@ -1,4 +1,4 @@
-import pygame, Button_Class
+import pygame, Button_Class_01
 pygame.init()
 
 Window_Width, Window_Height = 360, 360
@@ -9,8 +9,8 @@ Screen.fill(('white'))
 Click_Img = pygame.image.load('images/ClickChick_Btn.png').convert_alpha()
 Exit_Img = pygame.image.load('images/Exit_Btn.png')
 
-Click_Btn = Button_Class.Button(80, 300, Click_Img, 0.7)
-Exit_Btn = Button_Class.Button(240, 300, Exit_Img, 0.7)
+Click_Btn = Button_Class_01.Button(80, 300, Click_Img, 0.7)
+Exit_Btn = Button_Class_01.Button(240, 300, Exit_Img, 0.7)
 
 Amount_Of_Eggs = 0
 

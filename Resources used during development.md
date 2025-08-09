@@ -4,3 +4,5 @@
 - https://stackoverflow.com/questions/11904981/local-variable-referenced-before-assignment
 - https://www.digitalocean.com/community/tutorials/python-time-sleep
 - https://stackoverflow.com/questions/62164580/how-to-sleep-in-one-function-without-sleeping-the-whole-program
+- https://www.reddit.com/r/learnpython/comments/l6ypnq/pygame_unblit_an_image/
+- https://youtu.be/4TfZjhw0J-8?si=cB2zRlOMPgpHvran
