@@ -15,5 +15,7 @@ This repo is for my finall assignment for my python cource in university. This i
 - Download the "Assets" folder
 
 # Devlog
+## Aug 9th 2025
+Implemented pygame sprites, which will drastically ease the work. The implementation still not fully done though. Regardless it will speed things up a lot and I can actually see how to move forward with the project!
 ## Jul 20th 2025
 Finally managed to make eggs to passively spawn each 5 seconds, without stopping the whole program. Now it just needs some polishing.
