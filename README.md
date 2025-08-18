@@ -15,6 +15,10 @@ This repo is for my finall assignment for my python cource in university. This i
 - Download the "Assets" folder
 
 # Devlog
+## Aug 18th 2025
+Add and Kill chicken buttons are now working
+Known bugs:
+Sometimes chicken does not appear or disappear after first click, requiring to click the buttons twice
 ## Aug 9th 2025
 Implemented pygame sprites, which will drastically ease the work. The implementation still not fully done though. Regardless it will speed things up a lot and I can actually see how to move forward with the project!
 ## Jul 20th 2025
