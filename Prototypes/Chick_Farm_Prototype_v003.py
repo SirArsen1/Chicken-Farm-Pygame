@@ -9,15 +9,15 @@ Screen.fill(('white'))
 Nest_Surface_1 = pygame.Surface((192, 192), flags=pygame.SRCALPHA)
 Nest_Surface_1.fill(('grey'))
 Nest_Surface_1_rect = Nest_Surface_1.get_rect(topleft = (42,82))
-
 Nest_Surface_2 = pygame.Surface((192, 192), flags=pygame.SRCALPHA)
 Nest_Surface_2.fill(('grey'))
-
 Nest_Surface_3 = pygame.Surface((192, 192), flags=pygame.SRCALPHA)
 Nest_Surface_3.fill(('grey'))
 
 Nest_Surfaces = [
-    {"surface":Nest_Surface_1, "rect":Nest_Surface_1_rect},
+    {"surface":Nest_Surface_1, "occupied":False},
+    {"surface":Nest_Surface_2, "occupied":False},
+    {"surface":Nest_Surface_3, "occupied":False}
 ]
 
 fps = pygame.time.Clock()
@@ -28,24 +28,16 @@ Click_Img = img('Assets/UI/Btn_Def_Action.png').convert_alpha()
 Exit_Img = img('Assets/UI/Btn_Def_Exit.png').convert_alpha()
 Score_Img = img('Assets/UI/Score.png').convert_alpha()
 Chick_Img = img('Assets/Aseprite files/Chicken.png').convert_alpha()
-Add_Chick_Img = img('Assets/UI batch 02/Btn_Def_AddChick.png').convert_alpha()
-Kill_Chick_Img = img('Assets/UI batch 02/Btn_Def_KillChick.png').convert_alpha()
+Add_Chick_Img = img('Assets/UI/Btn_Def_AddChick.png').convert_alpha()
+Kill_Chick_Img = img('Assets/UI/Btn_Def_KillChick.png').convert_alpha()
 
-Click_Btn = Button_Class_02.Button(216, 280, Click_Img, 1)
-Exit_Btn = Button_Class_02.Button(440, 280, Exit_Img, 1)
-
-Add_Chick_Btn = Button_Class_02.Button(156, 94, Add_Chick_Img, 1)
-Kill_Chick_Btn = Button_Class_02.Button(192, 94, Kill_Chick_Img, 1)
+Click_Btn = Button_Class_02.Button(144, 280, Click_Img, 1)
+Exit_Btn = Button_Class_02.Button(368, 280, Exit_Img, 1)
+Add_Chick_Btn = Button_Class_02.Button(440, 280, Add_Chick_Img, 1)
+Kill_Chick_Btn = Button_Class_02.Button(512, 280, Kill_Chick_Img, 1)
 
 System_Buttons = pygame.sprite.Group()
-System_Buttons.add(Click_Btn, Exit_Btn)
-
-Chick_Nest1_Buttons = pygame.sprite.Group()
-Chick_Nest1_Buttons.add(Add_Chick_Btn, Kill_Chick_Btn)
-Chick_Nest2_Buttons = pygame.sprite.Group()
-Chick_Nest2_Buttons.add(Add_Chick_Btn, Kill_Chick_Btn)
-Chick_Nest3_Buttons = pygame.sprite.Group()
-Chick_Nest3_Buttons.add(Add_Chick_Btn, Kill_Chick_Btn)
+System_Buttons.add(Click_Btn, Exit_Btn, Add_Chick_Btn, Kill_Chick_Btn)
 
 Amount_Of_Eggs = 0
 Run = True
@@ -59,19 +51,30 @@ def Button_Logic():
     if Exit_Btn.draw(Screen):
         Run = False
 
-    if Add_Chick_Btn.draw(Nest_Surface_1):
-        Chickens.draw(Nest_Surface_1)
-        Chick_NPC.set_idle_egg_spawn_True()
-    elif Add_Chick_Btn.draw(Nest_Surface_2):
-        Chickens.draw(Nest_Surface_2)
-        Chick_NPC.set_idle_egg_spawn_True()
-    elif Add_Chick_Btn.draw(Nest_Surface_3):
-        Chickens.draw(Nest_Surface_3)
-        Chick_NPC.set_idle_egg_spawn_True()
+    if Add_Chick_Btn.draw(Screen):
+        for nest in Nest_Surfaces:
+            if not nest["occupied"]:
+                Chickens.draw(nest["surface"])
+                Chick_NPC.set_idle_egg_spawn_True()
+                nest["occupied"] = True
+                print("chic added")
+                if not Chickens:
+                    Chickens.add(Chick_NPC)
+                else: pass
+                return
 
-    if Kill_Chick_Btn.draw(Nest_Surface_1):
-        # Now I need to erase it
-        Chick_NPC.set_idle_egg_spawn_False()
+    if Kill_Chick_Btn.draw(Screen):
+        for nest in Nest_Surfaces:
+            if nest["occupied"]:
+                Chick_NPC.kill()
+                Chick_NPC.set_idle_egg_spawn_False()
+                nest["occupied"] = False
+                Chickens.update(nest["surface"])
+                nest["surface"].fill('grey')
+                Chickens.update(nest["surface"])
+                pygame.display.update()
+                print("chic delete")
+                return
 
 def Game_Text():
     global Amount_Of_Eggs
@@ -119,8 +122,6 @@ class Chicken_Class(pygame.sprite.Sprite):
             self.Next_Egg_Spawn_Update = Get_Time + Egg_Spawn_Delay
 
 Chick_NPC = Chicken_Class(0, 0, Chick_Img, 1)
-Chick_NPC_2 = Chicken_Class(42, 84, Chick_Img, 1)
-Chick_NPC_3 = Chicken_Class(42, 84, Chick_Img, 1)
 
 Chickens = pygame.sprite.Group()
 Chickens.add(Chick_NPC)
@@ -132,6 +133,8 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 Run = False
+
+        Screen.fill(('white'))
 
         Chick_NPC.idle_egg_spawn()
 
@@ -146,16 +149,6 @@ def main():
 
         System_Buttons.update()
         System_Buttons.draw(Screen)
-
-        Chick_Nest1_Buttons.update()
-        Chick_Nest2_Buttons.update()
-        Chick_Nest3_Buttons.update()
-
-        Chick_Nest1_Buttons.draw(Screen)
-        Chick_Nest2_Buttons.draw(Screen)
-        Chick_Nest3_Buttons.draw(Screen)
-
-        Chickens.draw(Nest_Surface_2)
 
         pygame.display.update()
         fps = 60
