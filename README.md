@@ -15,6 +15,8 @@ This repo is for my finall assignment for my python cource in university. This i
 - Download the "Assets" folder
 
 # Devlog
+## Aug 19th 2025
+Fixed the bug with Add_Chick_Btn and Kill_Chick_Btn
 ## Aug 18th 2025
 Add and Kill chicken buttons are now working
 Known bugs:
