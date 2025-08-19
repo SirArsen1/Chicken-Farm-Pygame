@@ -17,6 +17,7 @@ This repo is for my finall assignment for my python cource in university. This i
 # Devlog
 ## Aug 19th 2025
 Fixed the bug with Add_Chick_Btn and Kill_Chick_Btn
+
 Shop opened its doors! New shop button has been added, now new window appears in which player can add items to cart (or remove them if they changed their mind). Although, buying feature is still in works, since it requires to make inventory, wallet and sell features.
 ## Aug 18th 2025
 Add and Kill chicken buttons are now working
