@@ -7,3 +7,4 @@
 - https://www.reddit.com/r/learnpython/comments/l6ypnq/pygame_unblit_an_image/
 - https://youtu.be/4TfZjhw0J-8?si=cB2zRlOMPgpHvran
 - https://www.reddit.com/r/pygame/comments/12q7vsd/anyone_know_if_i_can_find_mouse_position_relative/
+- https://www.reddit.com/r/pygame/comments/k8dtjs/how_to_get_an_image_to_stay_on_screen_after/

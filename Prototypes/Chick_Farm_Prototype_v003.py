@@ -1,4 +1,4 @@
-import pygame, Button_Class_02, random, time
+import pygame, Button_Class_02, random
 pygame.init()
 
 Window_Width, Window_Height = 720, 360
@@ -20,26 +20,90 @@ fps = pygame.time.Clock()
 img = pygame.image.load
 blit = pygame.Surface.blit
 
+class Custom_Sprite(pygame.sprite.Sprite):
+    def __init__(self, image, x, y):
+        super().__init__()
+        self.image = image
+        self.rect = self.image.get_rect()
+        self.rect.topleft = (x, y)
+
 Click_Img = img('Assets/UI/Btn_Def_Action.png').convert_alpha()
 Exit_Img = img('Assets/UI/Btn_Def_Exit.png').convert_alpha()
 Score_Img = img('Assets/UI/Score.png').convert_alpha()
 Chick_Img = img('Assets/Aseprite files/Chicken.png').convert_alpha()
 Add_Chick_Img = img('Assets/UI/Btn_Def_AddChick.png').convert_alpha()
 Kill_Chick_Img = img('Assets/UI/Btn_Def_KillChick.png').convert_alpha()
+Shop_Btn_Img = img('Assets/UI batch 02/Btn_Def_Shop.png').convert_alpha()
+Shop_Window_Img = img('Assets/UI batch 02/Shop_Window.png').convert_alpha()
+Add_to_cart_Btn_Img = img('Assets/UI batch 02/Add_to_cart_Btn.png').convert_alpha()
+Remove_from_cart_Btn_Img = img('Assets/UI batch 02/Minus_from_cart_Btn.png').convert_alpha()
+Close_Window_Btn_Img = img('Assets/UI batch 02/Close_Window_Btn.png').convert_alpha()
+Buy_Btn_Img = img('Assets/UI batch 02/Buy_Btn.png').convert_alpha()
 
-Click_Btn = Button_Class_02.Button(144, 280, Click_Img, 1)
-Exit_Btn = Button_Class_02.Button(368, 280, Exit_Img, 1)
-Add_Chick_Btn = Button_Class_02.Button(440, 280, Add_Chick_Img, 1)
-Kill_Chick_Btn = Button_Class_02.Button(512, 280, Kill_Chick_Img, 1)
+Click_Btn = Button_Class_02.Button(108, 270, Click_Img, 1)
+Exit_Btn = Button_Class_02.Button(332, 270, Exit_Img, 1)
+Add_Chick_Btn = Button_Class_02.Button(404, 270, Add_Chick_Img, 1)
+Kill_Chick_Btn = Button_Class_02.Button(476, 270, Kill_Chick_Img, 1)
+Shop_Btn = Button_Class_02.Button(548, 270, Shop_Btn_Img, 1)
+Add_Chicken_to_cart_Btn = Button_Class_02.Button(462, 117, Add_to_cart_Btn_Img, 1)
+Add_Food_to_cart_Btn = Button_Class_02.Button(462, 153, Add_to_cart_Btn_Img, 1)
+Remove_Chicken_to_cart_Btn = Button_Class_02.Button(494, 117, Remove_from_cart_Btn_Img, 1)
+Remove_Food_to_cart_Btn = Button_Class_02.Button(494, 153, Remove_from_cart_Btn_Img, 1)
+Close_Shop_Window_Btn = Button_Class_02.Button(196, 81, Close_Window_Btn_Img, 1)
+Buy_Btn = Button_Class_02.Button(316, 235, Buy_Btn_Img, 1)
+
+Shop_Window = Custom_Sprite(Shop_Window_Img, 180, 65)
 
 System_Buttons = pygame.sprite.Group()
-System_Buttons.add(Click_Btn, Exit_Btn, Add_Chick_Btn, Kill_Chick_Btn)
+System_Buttons.add(Click_Btn, Exit_Btn, Add_Chick_Btn, Kill_Chick_Btn, Shop_Btn,)
 
+Shop_Window_UI = pygame.sprite.Group()
+Shop_Window_UI.add(Shop_Window, Add_Chicken_to_cart_Btn, Add_Food_to_cart_Btn, Remove_Chicken_to_cart_Btn, Remove_Food_to_cart_Btn, Close_Shop_Window_Btn, Buy_Btn)
+
+Chicken_Stock = 3
+Meat_Stock = 0
 Amount_Of_Eggs = 0
+
+# SHOP logic
+Shop_Catalogue = [
+    {"item name":"Food", "value":2, "amount":9999},
+    {"item name": "Chicken", "value":6, "amount":9999},
+]
+Shop_Cart = [
+    {"item name":"Food", "value":2, "amount":0},
+    {"item name": "Chicken", "value":6, "amount":0},
+]
+Inventory = [
+    {"item name":"Food", "value":2, "amount":0},
+    {"item name":"Chicken", "value":6, "amount":0},
+    {"item name":"Meat", "value":5, "amount":0},
+    {"item name":"Eggs", "value":0.5, "amount":f'{Amount_Of_Eggs}'},
+]
+
+Shop_Open = False
 Run = True
 
+def Add_To_Cart(item_name, Shop_Catalogue, Shop_Cart):
+    for item in Shop_Cart:
+        if item['item name'] == item_name:
+            item['amount'] += 1
+            return
+    for item in Shop_Catalogue:
+        if item['item'] == item_name:
+            Shop_Cart.append({"item name": item["item name"], "value": item["value"], "amount": 1})
+            return
+def Remove_From_Cart(item_name, Shop_Catalogue, Shop_Cart):
+    for item in Shop_Cart:
+        if item['item name'] == item_name:
+            item['amount'] -= 1
+            return
+    for item in Shop_Catalogue:
+        if item['item'] == item_name:
+            Shop_Cart.pop({"item name": item["item name"], "value": item["value"], "amount": 1})
+            return
+
 def Button_Logic():
-    global Run, Amount_Of_Eggs
+    global Run, Amount_Of_Eggs, Chicken_Stock, Meat_Stock, Shop_Open
 
     if Click_Btn.draw(Screen):
         Amount_Of_Eggs += 1
@@ -49,7 +113,7 @@ def Button_Logic():
 
     if Add_Chick_Btn.draw(Screen):
         for nest in Nest_Surfaces:
-            if not nest["occupied"]:
+            if not nest["occupied"] and Chicken_Stock > 0:
                 Chickens.draw(nest["surface"])
                 Chick_NPC.set_idle_egg_spawn_True()
                 if not Chickens:
@@ -58,6 +122,7 @@ def Button_Logic():
                     Chick_NPC.set_idle_egg_spawn_True()
                 nest["occupied"] = True
                 pygame.display.update()
+                Chicken_Stock -= 1
                 print("chic added")
                 return
 
@@ -74,7 +139,32 @@ def Button_Logic():
                 print("chic delete")
                 return
 
-def Game_Text():
+    if Shop_Btn.draw(Screen):
+        Shop_Open = True
+        print("Shop opened")
+
+    if Close_Shop_Window_Btn.draw(Screen):
+        Shop_Open = False
+        print("Shop closed")
+
+    if Add_Chicken_to_cart_Btn.draw(Screen):
+        Add_To_Cart("Chicken", Shop_Catalogue, Shop_Cart)
+        print("Added Chicken")
+    if Remove_Chicken_to_cart_Btn.draw(Screen) and Shop_Cart[1]['amount'] > 0:
+        Remove_From_Cart("Chicken", Shop_Catalogue, Shop_Cart)
+        print("Removed Chicken")
+    if Add_Food_to_cart_Btn.draw(Screen):
+        Add_To_Cart("Food", Shop_Catalogue, Shop_Cart)
+        print("Added Food")
+    if Remove_Food_to_cart_Btn.draw(Screen) and Shop_Cart[0]['amount'] > 0:
+        Remove_From_Cart("Food", Shop_Catalogue, Shop_Cart)
+        print("Removed Food")
+
+    if Buy_Btn.draw(Screen):
+        # supposed to take all amount of items from cart to inventory and take the money from wallet
+        pass
+
+def Main_Screen_Text():
     global Amount_Of_Eggs
 
     Font_Name = 'NeueBit' #Ask teacher about this problem, python fails to identify bold version of installed font
@@ -88,6 +178,24 @@ def Game_Text():
     Text_Pad_Surface.blit(Score_Img, (0, 0))
     Text_Pad_Surface.blit(Text, (223, 22))
     Screen.blit(Text_Pad_Surface, (216, 16))
+
+def Shop_Window_Text():
+    global Shop_Catalogue, Shop_Cart
+
+    Font_Name = 'NeueBit' #Ask teacher about this problem, python fails to identify bold version of installed font
+    Body_Font_Size = 32
+    Body_Font = pygame.font.SysFont(Font_Name, Body_Font_Size)
+    Body_Line1_Value_Chicken = Body_Font.render(f'{Shop_Cart[1]["value"]}$', True, ('black'))
+    Body_Line1_Amount_Chicken = Body_Font.render(f'{Shop_Cart[1]["amount"]}x', True, ('black'))
+    Body_Line2_Value_Food = Body_Font.render(f'{Shop_Cart[0]["value"]}$', True, ('black'))
+    Body_Line2_Amount_Food = Body_Font.render(f'{Shop_Cart[0]["amount"]}x', True, ('black'))
+    Body_Final_Price = Body_Font.render(f'{((Shop_Cart[1]["amount"])*(Shop_Cart[1]["value"])+(Shop_Cart[0]["amount"])*(Shop_Cart[0]["value"]))}$', True, ('black'))
+
+    Screen.blit(Body_Line1_Value_Chicken, (356, 122))
+    Screen.blit(Body_Line1_Amount_Chicken, (404, 123))
+    Screen.blit(Body_Line2_Value_Food, (356, 158))
+    Screen.blit(Body_Line2_Amount_Food, (404, 159))
+    Screen.blit(Body_Final_Price, (391, 205))
 
 class Chicken_Class(pygame.sprite.Sprite):
     def __init__(self, x, y, image, scale, egg_spawn: bool = False):
@@ -125,7 +233,7 @@ Chickens = pygame.sprite.Group()
 Chickens.add(Chick_NPC)
 
 def main():
-    global Run, fps, blit, Amount_Of_Eggs
+    global Run, fps, blit, Amount_Of_Eggs, Shop_Open
 
     while Run:
         for event in pygame.event.get():
@@ -136,7 +244,7 @@ def main():
 
         Chick_NPC.idle_egg_spawn()
 
-        Game_Text()
+        Main_Screen_Text()
         Button_Logic()
 
         pygame.Surface.blit(Screen, Nest_Surface_1, (42, 82))
@@ -147,6 +255,12 @@ def main():
 
         System_Buttons.update()
         System_Buttons.draw(Screen)
+
+        Shop_Window_UI.update()
+        if Shop_Open:
+            Shop_Window_UI.update()
+            Shop_Window_UI.draw(Screen)
+            Shop_Window_Text()
 
         pygame.display.update()
         fps = 60
