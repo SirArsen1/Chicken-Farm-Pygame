@@ -7,12 +7,8 @@ pygame.display.set_caption('ChickFarm!!!')
 Screen.fill(('white'))
 
 Nest_Surface_1 = pygame.Surface((192, 192), flags=pygame.SRCALPHA)
-Nest_Surface_1.fill(('grey'))
-Nest_Surface_1_rect = Nest_Surface_1.get_rect(topleft = (42,82))
 Nest_Surface_2 = pygame.Surface((192, 192), flags=pygame.SRCALPHA)
-Nest_Surface_2.fill(('grey'))
 Nest_Surface_3 = pygame.Surface((192, 192), flags=pygame.SRCALPHA)
-Nest_Surface_3.fill(('grey'))
 
 Nest_Surfaces = [
     {"surface":Nest_Surface_1, "occupied":False},
@@ -56,11 +52,13 @@ def Button_Logic():
             if not nest["occupied"]:
                 Chickens.draw(nest["surface"])
                 Chick_NPC.set_idle_egg_spawn_True()
-                nest["occupied"] = True
-                print("chic added")
                 if not Chickens:
                     Chickens.add(Chick_NPC)
-                else: pass
+                    Chickens.draw(nest["surface"])
+                    Chick_NPC.set_idle_egg_spawn_True()
+                nest["occupied"] = True
+                pygame.display.update()
+                print("chic added")
                 return
 
     if Kill_Chick_Btn.draw(Screen):
@@ -70,7 +68,7 @@ def Button_Logic():
                 Chick_NPC.set_idle_egg_spawn_False()
                 nest["occupied"] = False
                 Chickens.update(nest["surface"])
-                nest["surface"].fill('grey')
+                nest["surface"].fill('white')
                 Chickens.update(nest["surface"])
                 pygame.display.update()
                 print("chic delete")
