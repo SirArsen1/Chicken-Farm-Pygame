@@ -15,6 +15,11 @@ This repo is for my finall assignment for my python cource in university. This i
 - Download the "Assets" folder
 
 # Devlog
+## Aug 26th 2025
+- The Shop now accepts your hard-earned money! Although, you only have 10 bucks for now, and can't get more since the feature to sell eggs and meat is not here yet, but it's coming soon!
+- Inventory is a thing now, you can appreciate the magnificently low amount of things you have there!
+- Changed a structure of counters, now the numbers come directly from Inventory list.
+- A lot of little things being changed and moved here and there.
 ## Aug 19th 2025
 Fixed the bug with Add_Chick_Btn and Kill_Chick_Btn
 
