@@ -19,7 +19,7 @@ This repo is for my finall assignment for my python cource in university. This i
 ## Aug 29th 2025
 - Added proper window button manager. Before player was able to click buttons that were invisible, but still clickable. For example: Market and Shop windows exit button have the same position, when you tried to leave either of these two windows, you would actually click both buttons at the same time. Now it's fixed!
 - Changed Button class, added a parameter which tracks if button can be clicked, accompanied by a function and a variable that both track current window.
-- Market is now open! although, player still can't sell anything, since when I started implementing the market feature I jumped halfway to fix the button issue.
+- Market is now open! ~~although, player still can't sell anything, since when I started implementing the market feature I jumped halfway to fix the button issue.~~ Sell all your hard hatched eggs and meat on a market, receiving in return the money!
 - The font was changed to VT323, from Google Fonts, previous font I used was only for personal use, so to not accidentally violate the font's license, I changed the font. Some graphic elements though might still contain the old font.
 ## Aug 26th 2025
 - The Shop now accepts your hard-earned money! Although, you only have 10 bucks for now, and can't get more since the feature to sell eggs and meat is not here yet, but it's coming soon!

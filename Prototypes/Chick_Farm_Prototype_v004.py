@@ -58,10 +58,10 @@ Close_Shop_Window_Btn = Button_Class(196, 81, Close_Window_Btn_Img, 1)
 Buy_Btn = Button_Class(316, 235, Buy_Btn_Img, 1)
 # Market window controls
 Sell_Btn = Button_Class(316, 235, Sell_Btn_Img, 1)
-Add_Chicken_to_Sell_Btn = Button_Class(462, 120, Add_to_cart_Btn_Img, 1)
-Add_Food_to_Sell_Btn = Button_Class(462, 154, Add_to_cart_Btn_Img, 1)
-Remove_Chicken_to_Sell_Btn = Button_Class(494, 120, Remove_from_cart_Btn_Img, 1)
-Remove_Food_to_Sell_Btn = Button_Class(494, 154, Remove_from_cart_Btn_Img, 1)
+Add_Meat_to_Sell_Btn = Button_Class(462, 120, Add_to_cart_Btn_Img, 1)
+Add_Eggs_to_Sell_Btn = Button_Class(462, 154, Add_to_cart_Btn_Img, 1)
+Remove_Meat_to_Sell_Btn = Button_Class(494, 120, Remove_from_cart_Btn_Img, 1)
+Remove_Eggs_to_Sell_Btn = Button_Class(494, 154, Remove_from_cart_Btn_Img, 1)
 Close_Market_Window_Btn = Button_Class(196, 81, Close_Window_Btn_Img, 1)
 # Inventory window controls
 Close_Inv_Btn = Button_Class(196, 96, Close_Inv_Btn_Img, 1)
@@ -82,7 +82,7 @@ Shop_Window_UI = pygame.sprite.Group()
 Shop_Window_UI.add(Shop_Window, Add_Chicken_to_cart_Btn, Add_Food_to_cart_Btn, Remove_Chicken_to_cart_Btn, Remove_Food_to_cart_Btn, Close_Shop_Window_Btn, Buy_Btn)
 # Market window sprite group
 Market_Window_UI = pygame.sprite.Group()
-Market_Window_UI.add(Market_Window, Add_Food_to_Sell_Btn, Add_Chicken_to_Sell_Btn, Remove_Chicken_to_Sell_Btn, Remove_Food_to_Sell_Btn, Close_Market_Window_Btn, Sell_Btn)
+Market_Window_UI.add(Market_Window, Add_Eggs_to_Sell_Btn, Add_Meat_to_Sell_Btn, Remove_Meat_to_Sell_Btn, Remove_Eggs_to_Sell_Btn, Close_Market_Window_Btn, Sell_Btn)
 # Main screen counters sprite group
 Counters_UI = pygame.sprite.Group()
 Counters_UI.add(Egg_Counter, Chicken_Counter, Money_Counter)
@@ -103,21 +103,21 @@ Nest_Surfaces = [
 # Shop's catalogue, cart and player inventory
 Shop_Catalogue = [
     {"item name":"Food", "value":2, "amount":9999},
-    {"item name":"Chicken", "value":6, "amount":9999},
+    {"item name":"Chicken", "value":8, "amount":9999},
 ]
 Shop_Cart = [
     {"item name":"Food", "value":2, "amount":0},
-    {"item name":"Chicken", "value":6, "amount":0},
+    {"item name":"Chicken", "value":8, "amount":0},
 ]
 Sell_Cart = [
-    {"item name":"Food", "value":2, "amount":0},
-    {"item name":"Chicken", "value":6, "amount":0},
+    {"item name":"Meat", "value":5, "amount":0},
+    {"item name":"Eggs", "value":1, "amount":0},
 ]
 Inventory = [   # Using indexes is uncomfortable buuuut I just want to make the game playable first, maybe then I will work on readability
     {"item name":"Food", "value":2, "amount":0}, #0
-    {"item name":"Chicken", "value":6, "amount":3}, #1
+    {"item name":"Chicken", "value":8, "amount":3}, #1
     {"item name":"Meat", "value":5, "amount":0}, #2
-    {"item name":"Eggs", "value":0.5, "amount":0}, #3
+    {"item name":"Eggs", "value":1, "amount":11}, #3
     {"item name":"Money", "value":1, "amount":10}, #4
 ]
 
@@ -178,32 +178,54 @@ def Buy_From_Cart():
                 print('money taken')
 
 # Market support functions
-def Add_To_Sell_Cart(item_name): # Right now it can add infinite amount of items instead of tracking the inventory
+def Add_To_Sell_Cart(item_name, required_amount): # Right now it can add infinite amount of items instead of tracking the inventory
     global  Inventory, Sell_Cart
-    for item in Sell_Cart:
-        if item['item name'] == item_name:
-            if item['amount'] <= Inventory[2]['amount']:
-                item['amount'] += 1
-                return
-            if item['amount'] >= Inventory[3]['amount']:
-                item['amount'] += 1
+    for inv_item in Inventory:
+        if inv_item['item name'] == item_name:
+            if inv_item['amount'] < required_amount:
+                print("no item to sell")
                 return
 
-    for item in Inventory:
-        if item['item name'] == item_name:
-            Sell_Cart.append({"item name": item["item name"], "value": item["value"], "amount": 1})
-            return
+            inv_item['amount'] -= required_amount
 
-def Remove_From_Sell_Cart(item_name):
+            for sell_item in Sell_Cart:
+                if sell_item['item name'] == item_name:
+                    sell_item['amount'] += required_amount
+                    print ('item put to sale')
+                    return
+
+            Sell_Cart.append({"item name": item_name, "value": inv_item['value'], "amount": required_amount})
+
+def Remove_From_Sell_Cart(item_name, required_amount):
     global Inventory, Sell_Cart
-    for item in Sell_Cart:
-        if item['item name'] == item_name:
-            item['amount'] -= 1
-            return
-    for item in Inventory:
-        if item['item name'] == item_name:
-            Sell_Cart.pop({"item name": item["item name"], "value": item["value"], "amount": 1})
-            return
+    for sell_item in Sell_Cart:
+        if sell_item['item name'] == item_name:
+            if sell_item['amount'] != 0:
+                if sell_item['amount'] < required_amount:
+                    return
+
+                sell_item['amount'] -= required_amount
+
+                for inv_item in Inventory:
+                    if inv_item['item name'] == item_name:
+                        if sell_item['amount'] > 0:
+                            inv_item['amount'] += required_amount
+                            print('item returned')
+                            return
+
+                        inv_item['amount'] += required_amount
+                        print('item returned')
+
+                Inventory.append({"item name": item_name, "value": inv_item['value'], "amount": required_amount})
+
+def Sell_All_From_Sell_Cart():
+    global Inventory, Sell_Cart
+    for sell_item in Sell_Cart:
+        Final_Price = (sell_item['amount'] * sell_item['value'])
+        Inventory[4]['amount'] += Final_Price
+        sell_item['amount'] = 0
+        print("items sold")
+
 
 # Buttons functions
 def Button_Logic():
@@ -283,18 +305,20 @@ def Button_Logic():
         Market_Open = False
         Current_Window = "Main"
         print("Market closed")
-    if Add_Chicken_to_Sell_Btn.draw(Screen):
-        Add_To_Sell_Cart("Chicken")
-        print("Put to sell Chicken")
-    if Remove_Chicken_to_Sell_Btn.draw(Screen):
-        Remove_From_Sell_Cart("Chicken")
-        print("Removed Chicken")
-    if Add_Food_to_Sell_Btn.draw(Screen):
-        Add_To_Sell_Cart("Food")
-        print("Put to sell Food")
-    if Remove_Food_to_Sell_Btn.draw(Screen):
-        Remove_From_Sell_Cart("Food")
-        print("Removed Food")
+    if Add_Meat_to_Sell_Btn.draw(Screen):
+        Add_To_Sell_Cart("Meat", 1)
+        #print("Put to sell Chicken")
+    if Remove_Meat_to_Sell_Btn.draw(Screen):
+        Remove_From_Sell_Cart("Meat", 1)
+        #print("Removed Chicken")
+    if Add_Eggs_to_Sell_Btn.draw(Screen):
+        Add_To_Sell_Cart("Eggs", 6)
+        #print("Put to sell Food")
+    if Remove_Eggs_to_Sell_Btn.draw(Screen):
+        Remove_From_Sell_Cart("Eggs", 6)
+        #print("Removed Food")
+    if Sell_Btn.draw(Screen):
+        Sell_All_From_Sell_Cart()
 
 # Text functions
 def Counters_Text():
@@ -363,25 +387,25 @@ def Market_Window_Text():
     # Window title
     Shop_Window_Tile = H1_Font.render(f'MARKET', True, ('black'))
     # Name
-    Body_Line1_Name_Chicken = Body_Font.render(f'Chicken', True, ('black'))
-    Body_Line2_Name_Food = Body_Font.render(f'Chick food', True, ('black'))
+    Body_Line1_Name_Meat = Body_Font.render(f'Meat', True, ('black'))
+    Body_Line2_Name_Eggs = Body_Font.render(f'6 eggs', True, ('black'))
     Body_Final_Name_Money = Body_Font.render(f'Final price:', True, ('black'))
     # Price
-    Body_Line1_Value_Chicken = Body_Font.render(f'{Sell_Cart[1]["value"]}$', True, ('black'))
-    Body_Line2_Value_Food = Body_Font.render(f'{Sell_Cart[0]["value"]}$', True, ('black'))
+    Body_Line1_Value_Meat = Body_Font.render(f'{Sell_Cart[0]["value"]}$', True, ('black'))
+    Body_Line2_Value_Eggs = Body_Font.render(f'{Sell_Cart[1]["value"]}$', True, ('black'))
     # Amount
-    Body_Line1_Amount_Chicken = Body_Font.render(f'{Sell_Cart[1]["amount"]}x', True, ('black'))
-    Body_Line2_Amount_Food = Body_Font.render(f'{Sell_Cart[0]["amount"]}x', True, ('black'))
+    Body_Line1_Amount_Meat = Body_Font.render(f'{Sell_Cart[0]["amount"]}x', True, ('black'))
+    Body_Line2_Amount_Eggs = Body_Font.render(f'{Sell_Cart[1]["amount"]}x', True, ('black'))
     # Final price
     Body_Final_Price = Body_Font.render(f'{((Sell_Cart[1]["amount"])*(Sell_Cart[1]["value"])+(Sell_Cart[0]["amount"])*(Sell_Cart[0]["value"]))}$', True, ('black'))
 
     Screen.blit(Shop_Window_Tile, (323, 72))
-    Screen.blit(Body_Line1_Name_Chicken, (196, 118))
-    Screen.blit(Body_Line2_Name_Food, (196, 152))
-    Screen.blit(Body_Line1_Value_Chicken, (356, 118))
-    Screen.blit(Body_Line1_Amount_Chicken, (404, 118))
-    Screen.blit(Body_Line2_Value_Food, (356, 152))
-    Screen.blit(Body_Line2_Amount_Food, (404, 152))
+    Screen.blit(Body_Line1_Name_Meat, (196, 118))
+    Screen.blit(Body_Line2_Name_Eggs, (196, 152))
+    Screen.blit(Body_Line1_Value_Meat, (320, 118))
+    Screen.blit(Body_Line1_Amount_Meat, (404, 118))
+    Screen.blit(Body_Line2_Value_Eggs, (320, 152))
+    Screen.blit(Body_Line2_Amount_Eggs, (404, 152))
     Screen.blit(Body_Final_Name_Money, (232, 200))
     Screen.blit(Body_Final_Price, (391, 200))
 
