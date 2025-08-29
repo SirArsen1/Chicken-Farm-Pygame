@@ -1,4 +1,5 @@
-import pygame, Button_Class_02, random
+import pygame, random
+from Button_Class_03 import Button_Class
 pygame.init()
 
 Window_Width, Window_Height = 720, 360
@@ -20,7 +21,6 @@ class Custom_Sprite(pygame.sprite.Sprite):
         self.rect.topleft = (x, y)
 
 # Images for sprites and other graphic elements
-Click_Img = img('Assets/UI/Btn_Def_Action.png').convert_alpha()
 Exit_Img = img('Assets/UI/Btn_Def_Exit.png').convert_alpha()
 Score_Img = img('Assets/UI/Score.png').convert_alpha()
 Chick_Img = img('Assets/Aseprite files/Chicken.png').convert_alpha()
@@ -43,29 +43,28 @@ Sell_Btn_Img = img('Assets/UI batch 02/Sell_Btn.png').convert_alpha()
 Market_Window_Clean_Img = img('Assets/UI batch 02/Market_Window_Clean.png')
 
 # Main control buttons
-Click_Btn = Button_Class_02.Button(108, 270, Click_Img, 1) # not used
-Exit_Btn = Button_Class_02.Button(148, 270, Exit_Img, 1)
-Add_Chick_Btn = Button_Class_02.Button(220, 270, Add_Chick_Img, 1)
-Kill_Chick_Btn = Button_Class_02.Button(292, 270, Kill_Chick_Img, 1)
-Shop_Btn = Button_Class_02.Button(364, 270, Shop_Btn_Img, 1)
-Market_Btn = Button_Class_02.Button(436, 270, Market_Btn_Img, 1)
-Inv_Btn = Button_Class_02.Button(508, 270, Inventory_Btn_Img, 1)
+Exit_Btn = Button_Class(148, 270, Exit_Img, 1)
+Add_Chick_Btn = Button_Class(220, 270, Add_Chick_Img, 1)
+Kill_Chick_Btn = Button_Class(292, 270, Kill_Chick_Img, 1)
+Shop_Btn = Button_Class(364, 270, Shop_Btn_Img, 1)
+Market_Btn = Button_Class(436, 270, Market_Btn_Img, 1)
+Inv_Btn = Button_Class(508, 270, Inventory_Btn_Img, 1)
 # Shop window controls
-Add_Chicken_to_cart_Btn = Button_Class_02.Button(462, 120, Add_to_cart_Btn_Img, 1)
-Add_Food_to_cart_Btn = Button_Class_02.Button(462, 154, Add_to_cart_Btn_Img, 1)
-Remove_Chicken_to_cart_Btn = Button_Class_02.Button(494, 120, Remove_from_cart_Btn_Img, 1)
-Remove_Food_to_cart_Btn = Button_Class_02.Button(494, 154, Remove_from_cart_Btn_Img, 1)
-Close_Shop_Window_Btn = Button_Class_02.Button(196, 81, Close_Window_Btn_Img, 1)
-Buy_Btn = Button_Class_02.Button(316, 235, Buy_Btn_Img, 1)
+Add_Chicken_to_cart_Btn = Button_Class(462, 120, Add_to_cart_Btn_Img, 1)
+Add_Food_to_cart_Btn = Button_Class(462, 154, Add_to_cart_Btn_Img, 1)
+Remove_Chicken_to_cart_Btn = Button_Class(494, 120, Remove_from_cart_Btn_Img, 1)
+Remove_Food_to_cart_Btn = Button_Class(494, 154, Remove_from_cart_Btn_Img, 1)
+Close_Shop_Window_Btn = Button_Class(196, 81, Close_Window_Btn_Img, 1)
+Buy_Btn = Button_Class(316, 235, Buy_Btn_Img, 1)
 # Market window controls
-Sell_Btn = Button_Class_02.Button(316, 235, Sell_Btn_Img, 1)
-Add_Chicken_to_Sell_Btn = Button_Class_02.Button(462, 120, Add_to_cart_Btn_Img, 1)
-Add_Food_to_Sell_Btn = Button_Class_02.Button(462, 154, Add_to_cart_Btn_Img, 1)
-Remove_Chicken_to_Sell_Btn = Button_Class_02.Button(494, 120, Remove_from_cart_Btn_Img, 1)
-Remove_Food_to_Sell_Btn = Button_Class_02.Button(494, 154, Remove_from_cart_Btn_Img, 1)
-Close_Market_Window_Btn = Button_Class_02.Button(196, 81, Close_Window_Btn_Img, 1)
+Sell_Btn = Button_Class(316, 235, Sell_Btn_Img, 1)
+Add_Chicken_to_Sell_Btn = Button_Class(462, 120, Add_to_cart_Btn_Img, 1)
+Add_Food_to_Sell_Btn = Button_Class(462, 154, Add_to_cart_Btn_Img, 1)
+Remove_Chicken_to_Sell_Btn = Button_Class(494, 120, Remove_from_cart_Btn_Img, 1)
+Remove_Food_to_Sell_Btn = Button_Class(494, 154, Remove_from_cart_Btn_Img, 1)
+Close_Market_Window_Btn = Button_Class(196, 81, Close_Window_Btn_Img, 1)
 # Inventory window controls
-Close_Inv_Btn = Button_Class_02.Button(196, 96, Close_Inv_Btn_Img, 1)
+Close_Inv_Btn = Button_Class(196, 96, Close_Inv_Btn_Img, 1)
 
 # Custom sprites
 Shop_Window = Custom_Sprite(Shop_Window_Img, 180, 65)
@@ -83,7 +82,7 @@ Shop_Window_UI = pygame.sprite.Group()
 Shop_Window_UI.add(Shop_Window, Add_Chicken_to_cart_Btn, Add_Food_to_cart_Btn, Remove_Chicken_to_cart_Btn, Remove_Food_to_cart_Btn, Close_Shop_Window_Btn, Buy_Btn)
 # Market window sprite group
 Market_Window_UI = pygame.sprite.Group()
-Market_Window_UI.add(Market_Window, Sell_Btn, Add_Food_to_Sell_Btn, Add_Chicken_to_Sell_Btn, Remove_Chicken_to_Sell_Btn, Remove_Food_to_Sell_Btn, Close_Market_Window_Btn)
+Market_Window_UI.add(Market_Window, Add_Food_to_Sell_Btn, Add_Chicken_to_Sell_Btn, Remove_Chicken_to_Sell_Btn, Remove_Food_to_Sell_Btn, Close_Market_Window_Btn, Sell_Btn)
 # Main screen counters sprite group
 Counters_UI = pygame.sprite.Group()
 Counters_UI.add(Egg_Counter, Chicken_Counter, Money_Counter)
@@ -115,17 +114,29 @@ Sell_Cart = [
     {"item name":"Chicken", "value":6, "amount":0},
 ]
 Inventory = [   # Using indexes is uncomfortable buuuut I just want to make the game playable first, maybe then I will work on readability
-    {"item name":"Food", "value":2, "amount":0},
-    {"item name":"Chicken", "value":6, "amount":3},
-    {"item name":"Meat", "value":5, "amount":0},
-    {"item name":"Eggs", "value":0.5, "amount":0},
-    {"item name":"Money", "value":1, "amount":10},
+    {"item name":"Food", "value":2, "amount":0}, #0
+    {"item name":"Chicken", "value":6, "amount":3}, #1
+    {"item name":"Meat", "value":5, "amount":0}, #2
+    {"item name":"Eggs", "value":0.5, "amount":0}, #3
+    {"item name":"Money", "value":1, "amount":10}, #4
 ]
 
 # Bools for running a game
 Inventory_Open = False
 Shop_Open = False
+Market_Open = False
 Run = True
+
+# Window manager support functions
+Current_Window = "Main"
+
+def Buttons_State_Checker(sprite_group, class_name, window): # checks which sprites are related to button class and blocks them from being clickable
+    # sprite_group = the sprite group that contains buttons we need to block,
+    # class_name = just in case if there will be other classes besides button, that I want to block,
+    # window = the name of the window in which buttons are supposed to work
+    for sprite in sprite_group:
+        if isinstance(sprite, class_name):
+            sprite.locked = (Current_Window != window)
 
 # Shop support functions
 def Add_To_Cart(item_name):
@@ -167,14 +178,37 @@ def Buy_From_Cart():
                 print('money taken')
 
 # Market support functions
+def Add_To_Sell_Cart(item_name): # Right now it can add infinite amount of items instead of tracking the inventory
+    global  Inventory, Sell_Cart
+    for item in Sell_Cart:
+        if item['item name'] == item_name:
+            if item['amount'] <= Inventory[2]['amount']:
+                item['amount'] += 1
+                return
+            if item['amount'] >= Inventory[3]['amount']:
+                item['amount'] += 1
+                return
 
+    for item in Inventory:
+        if item['item name'] == item_name:
+            Sell_Cart.append({"item name": item["item name"], "value": item["value"], "amount": 1})
+            return
+
+def Remove_From_Sell_Cart(item_name):
+    global Inventory, Sell_Cart
+    for item in Sell_Cart:
+        if item['item name'] == item_name:
+            item['amount'] -= 1
+            return
+    for item in Inventory:
+        if item['item name'] == item_name:
+            Sell_Cart.pop({"item name": item["item name"], "value": item["value"], "amount": 1})
+            return
 
 # Buttons functions
 def Button_Logic():
-    global Run, Inventory, Shop_Open, Inventory_Open
+    global Run, Inventory, Shop_Open, Inventory_Open, Market_Open, Current_Window
     # Main screen menu buttons
-    if Click_Btn.draw(Screen):
-        Inventory[3]['amount'] += 1
     if Exit_Btn.draw(Screen):
         Run = False
     if Add_Chick_Btn.draw(Screen):
@@ -207,9 +241,13 @@ def Button_Logic():
     # Shop
     if Shop_Btn.draw(Screen):
         Shop_Open = True
+        Current_Window = "Shop"
+        print(Current_Window)
         print("Shop opened")
     if Close_Shop_Window_Btn.draw(Screen):
         Shop_Open = False
+        Current_Window = "Main"
+        print(Current_Window)
         print("Shop closed")
     if Add_Chicken_to_cart_Btn.draw(Screen):
         Add_To_Cart("Chicken")
@@ -230,10 +268,33 @@ def Button_Logic():
     # Inventory
     if Inv_Btn.draw(Screen):
         Inventory_Open = True
+        Current_Window = "Inventory"
         print ("Inventory opened")
     if Close_Inv_Btn.draw(Screen):
         Inventory_Open = False
+        Current_Window = "Main"
         print("Inventory closed")
+    # Market
+    if Market_Btn.draw(Screen):
+        Market_Open = True
+        Current_Window = "Market"
+        print("Market opened")
+    if Close_Market_Window_Btn.draw(Screen):
+        Market_Open = False
+        Current_Window = "Main"
+        print("Market closed")
+    if Add_Chicken_to_Sell_Btn.draw(Screen):
+        Add_To_Sell_Cart("Chicken")
+        print("Put to sell Chicken")
+    if Remove_Chicken_to_Sell_Btn.draw(Screen):
+        Remove_From_Sell_Cart("Chicken")
+        print("Removed Chicken")
+    if Add_Food_to_Sell_Btn.draw(Screen):
+        Add_To_Sell_Cart("Food")
+        print("Put to sell Food")
+    if Remove_Food_to_Sell_Btn.draw(Screen):
+        Remove_From_Sell_Cart("Food")
+        print("Removed Food")
 
 # Text functions
 def Counters_Text():
@@ -407,7 +468,7 @@ Chickens.add(Chick_NPC)
 
 # Main loop
 def main():
-    global Run, fps, blit, Shop_Open, Inventory_Open
+    global Run, fps, blit, Shop_Open, Inventory_Open, Current_Window
 
     while Run:
         for event in pygame.event.get():
@@ -432,15 +493,25 @@ def main():
 
         System_Buttons.update()
         System_Buttons.draw(Screen)
+        Buttons_State_Checker(System_Buttons, Button_Class, "Main")
 
         if Shop_Open:
             Shop_Window_UI.update()
             Shop_Window_UI.draw(Screen)
             Shop_Window_Text()
+        Buttons_State_Checker(Shop_Window_UI, Button_Class, "Shop")
+
         if Inventory_Open:
             Inventory_Window_UI.update()
             Inventory_Window_UI.draw(Screen)
             Inventory_Window_Text()
+        Buttons_State_Checker(Inventory_Window_UI, Button_Class, "Inventory")
+
+        if Market_Open:
+            Market_Window_UI.update()
+            Market_Window_UI.draw(Screen)
+            Market_Window_Text()
+        Buttons_State_Checker(Market_Window_UI, Button_Class, "Market")
 
         pygame.display.update()
         fps = 60

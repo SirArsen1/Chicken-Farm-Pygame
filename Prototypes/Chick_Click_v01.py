@@ -6,8 +6,8 @@ Screen = pygame.display.set_mode((Window_Width, Window_Height))
 pygame.display.set_caption('Chick-Click')
 Screen.fill(('white'))
 
-Click_Img = pygame.image.load('images/ClickChick_Btn.png').convert_alpha()
-Exit_Img = pygame.image.load('images/Exit_Btn.png')
+Click_Img = pygame.image.load('Assets/images/ClickChick_Btn.png').convert_alpha()
+Exit_Img = pygame.image.load('Assets/images/Exit_Btn.png')
 
 Click_Btn = Button_Class_01.Button(80, 300, Click_Img, 0.7)
 Exit_Btn = Button_Class_01.Button(240, 300, Exit_Img, 0.7)
