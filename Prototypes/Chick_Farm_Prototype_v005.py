@@ -1,5 +1,8 @@
 import pygame, random
 from Button_Class_03 import Button_Class
+from Chicken_Class_02 import Chicken_Class
+from Inventory import Shop_Catalogue, Shop_Cart, Sell_Cart, Inventory
+
 pygame.init()
 
 Window_Width, Window_Height = 720, 360
@@ -13,19 +16,19 @@ blit = pygame.Surface.blit # I'm very lazy
 Font_Name = 'VT323'  # Font used in the game
 
 # Custom sprite class for blank windows, that work as paddings for text
-class Custom_Sprite(pygame.sprite.Sprite):
+class Custom_Sprite(pygame.sprite.Sprite): #should I separate all classes into separate file?
     def __init__(self, image, x, y):
         super().__init__()
         self.image = image
         self.rect = self.image.get_rect()
         self.rect.topleft = (x, y)
 
-# Images for sprites and other graphic elements
+# Images for sprites and other graphic elements # Maybe separate those too
 Exit_Img = img('Assets/UI/Btn_Def_Exit.png').convert_alpha()
 Score_Img = img('Assets/UI/Score.png').convert_alpha()
 Chick_Img = img('Assets/Aseprite files/Chicken.png').convert_alpha()
-Add_Chick_Img = img('Assets/UI/Btn_Def_AddChick.png').convert_alpha()
-Kill_Chick_Img = img('Assets/UI/Btn_Def_KillChick.png').convert_alpha()
+Add_Chick_Img = img('Assets/UI batch 02/Btn_Def_AddChick.png').convert_alpha()
+Kill_Chick_Img = img('Assets/UI batch 02/Btn_Def_KillChick.png').convert_alpha()
 Shop_Btn_Img = img('Assets/UI batch 02/Btn_Def_Shop.png').convert_alpha()
 Shop_Window_Img = img('Assets/UI batch 02/Shop_Window_Clean.png').convert_alpha()
 Add_to_cart_Btn_Img = img('Assets/UI batch 02/Add_to_cart_Btn.png').convert_alpha()
@@ -40,15 +43,17 @@ Inventory_Btn_Img = img('Assets/UI batch 02/Btn_Def_Inventory.png').convert_alph
 Inventory_Window_Img = img('Assets/UI batch 02/Inventory_Window_Clean.png').convert_alpha()
 Close_Inv_Btn_Img = img('Assets/UI batch 02/Close_Window_Btn.png').convert_alpha()
 Sell_Btn_Img = img('Assets/UI batch 02/Sell_Btn.png').convert_alpha()
-Market_Window_Clean_Img = img('Assets/UI batch 02/Market_Window_Clean.png')
+Market_Window_Clean_Img = img('Assets/UI batch 02/Market_Window_Clean.png').convert_alpha()
+Feed_Btn_Img = img('Assets/UI batch 02/Btn_Def_Feed.png').convert_alpha()
 
 # Main control buttons
-Exit_Btn = Button_Class(148, 270, Exit_Img, 1)
-Add_Chick_Btn = Button_Class(220, 270, Add_Chick_Img, 1)
-Kill_Chick_Btn = Button_Class(292, 270, Kill_Chick_Img, 1)
-Shop_Btn = Button_Class(364, 270, Shop_Btn_Img, 1)
-Market_Btn = Button_Class(436, 270, Market_Btn_Img, 1)
-Inv_Btn = Button_Class(508, 270, Inventory_Btn_Img, 1)
+Exit_Btn = Button_Class(112, 270, Exit_Img, 1)
+Add_Chick_Btn = Button_Class(184, 270, Add_Chick_Img, 1)
+Kill_Chick_Btn = Button_Class(256, 270, Kill_Chick_Img, 1)
+Shop_Btn = Button_Class(328, 270, Shop_Btn_Img, 1)
+Market_Btn = Button_Class(400, 270, Market_Btn_Img, 1)
+Inv_Btn = Button_Class(472, 270, Inventory_Btn_Img, 1)
+Feed_Btn = Button_Class(544, 270, Feed_Btn_Img, 1)
 # Shop window controls
 Add_Chicken_to_cart_Btn = Button_Class(462, 120, Add_to_cart_Btn_Img, 1)
 Add_Food_to_cart_Btn = Button_Class(462, 154, Add_to_cart_Btn_Img, 1)
@@ -76,7 +81,7 @@ Market_Window = Custom_Sprite(Market_Window_Clean_Img, 180, 65)
 
 # Main control buttons sprite group
 System_Buttons = pygame.sprite.Group()
-System_Buttons.add(Exit_Btn, Add_Chick_Btn, Kill_Chick_Btn, Shop_Btn,Market_Btn, Inv_Btn)
+System_Buttons.add(Exit_Btn, Add_Chick_Btn, Kill_Chick_Btn, Shop_Btn,Market_Btn, Inv_Btn, Feed_Btn)
 # Shop window sprite group
 Shop_Window_UI = pygame.sprite.Group()
 Shop_Window_UI.add(Shop_Window, Add_Chicken_to_cart_Btn, Add_Food_to_cart_Btn, Remove_Chicken_to_cart_Btn, Remove_Food_to_cart_Btn, Close_Shop_Window_Btn, Buy_Btn)
@@ -94,37 +99,17 @@ Nest_Surface_1 = pygame.Surface((192, 192), flags=pygame.SRCALPHA)
 Nest_Surface_2 = pygame.Surface((192, 192), flags=pygame.SRCALPHA)
 Nest_Surface_3 = pygame.Surface((192, 192), flags=pygame.SRCALPHA)
 # Nest Surface dict with custom "flag"
-Nest_Surfaces = [
-    {"surface":Nest_Surface_1, "occupied":False},
-    {"surface":Nest_Surface_2, "occupied":False},
-    {"surface":Nest_Surface_3, "occupied":False}
-]
-
-# Shop's catalogue, cart and player inventory
-Shop_Catalogue = [
-    {"item name":"Food", "value":2, "amount":9999},
-    {"item name":"Chicken", "value":8, "amount":9999},
-]
-Shop_Cart = [
-    {"item name":"Food", "value":2, "amount":0},
-    {"item name":"Chicken", "value":8, "amount":0},
-]
-Sell_Cart = [
-    {"item name":"Meat", "value":5, "amount":0},
-    {"item name":"Eggs", "value":1, "amount":0},
-]
-Inventory = [   # Using indexes is uncomfortable buuuut I just want to make the game playable first, maybe then I will work on readability
-    {"item name":"Food", "value":2, "amount":0}, #0
-    {"item name":"Chicken", "value":8, "amount":3}, #1
-    {"item name":"Meat", "value":5, "amount":0}, #2
-    {"item name":"Eggs", "value":1, "amount":11}, #3
-    {"item name":"Money", "value":1, "amount":10}, #4
+Nest_Surfaces = [ # occupied is a check whether the surface is taken by chicken sprite
+    {"surface":Nest_Surface_1, "occupied":False, "object":None, "visibility":False, "hp_pos":(114,79)},
+    {"surface":Nest_Surface_2, "occupied":False, "object":None, "visibility":False, "hp_pos":(336,79)},
+    {"surface":Nest_Surface_3, "occupied":False, "object":None, "visibility":False, "hp_pos":(558,79)}
 ]
 
 # Bools for running a game
 Inventory_Open = False
 Shop_Open = False
 Market_Open = False
+HP_Text_Visibility = False
 Run = True
 
 # Window manager support functions
@@ -142,11 +127,12 @@ def Buttons_State_Checker(sprite_group, class_name, window): # checks which spri
 def Add_To_Cart(item_name):
     global  Shop_Catalogue, Shop_Cart
     for item in Shop_Cart:
-        if item['item name'] == item_name:
+        final_item_price = item['amount'] * item['value']
+        if item['item name'] == item_name and final_item_price <= Inventory[4]['amount']:
             item['amount'] += 1
             return
     for item in Shop_Catalogue:
-        if item['item name'] == item_name:
+        if item['item name'] == item_name and final_item_price <= Inventory[4]['amount']:
             Shop_Cart.append({"item name": item["item name"], "value": item["value"], "amount": 1})
             return
 
@@ -226,39 +212,61 @@ def Sell_All_From_Sell_Cart():
         sell_item['amount'] = 0
         print("items sold")
 
+# Chicken spawn logic
+def Chicken_Spawn(): #Should make a unique chicken everytime used and conditions are met
+    global Inventory, Nest_Surfaces
+
+    for nest in Nest_Surfaces:
+        if not nest["occupied"] and Inventory[1]["amount"] > 0:
+
+            nest['object'] = Chicken_Class(0, 0, Chick_Img, 1, 30)
+            nest['visibility'] = True
+            nest['object'].set_idle_egg_spawn_True()
+            nest['occupied'] = True
+
+            Chickens.add(nest['object'])
+            Chickens.draw(nest["surface"])
+            pygame.display.update()
+
+            Inventory[1]["amount"] -= 1
+            print("chic added")
+            return
+
+def Chicken_Remove():
+    global Inventory, Nest_Surfaces
+
+    for nest in Nest_Surfaces:
+        if nest["occupied"] and nest["object"] is not None:
+
+            nest["object"].set_idle_egg_spawn_False()
+
+            nest["object"] = None
+            nest["visibility"] = False
+            nest["occupied"] = False
+
+            nest["surface"].fill('white')
+            pygame.display.update()
+
+            Inventory[2]['amount'] += 1
+            print("chic delete")
+            return
+
+def Chicken_Class_Objects_Update():
+    for chicken in Nest_Surfaces:
+        if chicken['object'] != None:
+            chicken['object'].idle_egg_spawn()
+            chicken['object'].hunger_meter_decrease()
+
 # Buttons functions
 def Button_Logic():
-    global Run, Inventory, Shop_Open, Inventory_Open, Market_Open, Current_Window
+    global Run, Inventory, Shop_Open, Inventory_Open, Market_Open, Current_Window, HP_Text_Visibility
     # Main screen menu buttons
     if Exit_Btn.draw(Screen):
         Run = False
     if Add_Chick_Btn.draw(Screen):
-        for nest in Nest_Surfaces:
-            if not nest["occupied"] and Inventory[1]["amount"] > 0:
-                Chickens.draw(nest["surface"])
-                Chick_NPC.set_idle_egg_spawn_True()
-                if not Chickens:
-                    Chickens.add(Chick_NPC)
-                    Chickens.draw(nest["surface"])
-                    Chick_NPC.set_idle_egg_spawn_True()
-                nest["occupied"] = True
-                pygame.display.update()
-                Inventory[1]["amount"] -= 1
-                print("chic added")
-                return
+        Chicken_Spawn()
     if Kill_Chick_Btn.draw(Screen):
-        for nest in Nest_Surfaces:
-            if nest["occupied"]:
-                Chick_NPC.kill()
-                Chick_NPC.set_idle_egg_spawn_False()
-                nest["occupied"] = False
-                Chickens.update(nest["surface"])
-                nest["surface"].fill('white')
-                Chickens.update(nest["surface"])
-                Inventory[2]['amount'] += 1
-                pygame.display.update()
-                print("chic delete")
-                return
+        Chicken_Remove()
     # Shop
     if Shop_Btn.draw(Screen):
         Shop_Open = True
@@ -318,6 +326,15 @@ def Button_Logic():
         #print("Removed Food")
     if Sell_Btn.draw(Screen):
         Sell_All_From_Sell_Cart()
+
+    if Feed_Btn.draw(Screen):
+        if Inventory[0]['amount'] > 0:
+            Inventory[0]['amount'] -= 1
+            for chicken in Nest_Surfaces:
+                if chicken['object'] != None:
+                    chicken['object'].hunger_meter_increase()
+            print('chicken being fed')
+            return
 
 # Text functions
 def Counters_Text():
@@ -453,38 +470,22 @@ def Inventory_Window_Text():
     Screen.blit(Body_Name_Money, (308, 240))
     Screen.blit(Body_Line5_Money, (368, 240))
 
+def Hunger_Points_Counter_Text():
+    global Chicken_Class, Nest_Surfaces
+
+    Font_Size = 32
+    Body_Font = pygame.font.SysFont(Font_Name, Font_Size)
+
+    for nest in Nest_Surfaces:
+        if nest['object'] is not None and nest['visibility']:
+            Max_HP = nest['object'].max_hp
+            Current_HP = nest['object'].hunger_level
+            Chicken_HP_Meter = Body_Font.render(f"{Current_HP}/{Max_HP}", True, 'black')
+            Screen.blit(Chicken_HP_Meter, nest['hp_pos'])
+            #print('HP')
+
 # Chicken class
-class Chicken_Class(pygame.sprite.Sprite):
-    def __init__(self, x, y, image, scale, egg_spawn: bool = False):
-        pygame.sprite.Sprite.__init__(self)
-        width = image.get_width()
-        height = image.get_height()
-        self.image = pygame.transform.scale(image, (int(width*scale),(height*scale)))
-        self.rect = image.get_rect()
-        self.rect.topleft = (x, y)
-        self.egg_spawn = egg_spawn
-
-    def set_idle_egg_spawn_True(self):
-        self.egg_spawn = True
-    def set_idle_egg_spawn_False(self):
-        self.egg_spawn = False
-
-    def idle_egg_spawn(self):
-        global Inventory
-
-        Egg_Spawn_Delay = 5000  # egg spawn, short for testing purpose, change later
-        Get_Time = pygame.time.get_ticks()
-
-        if not hasattr(self, "Next_Egg_Spawn_Update"):
-            self.Next_Egg_Spawn_Update = 0
-
-        if self.egg_spawn == True and (self.Next_Egg_Spawn_Update < Get_Time):
-            Possible_Amount_Eggs = (1, 0, 2, 0, 3) # zeroes added to introduce randomness into the spawn, without creating a whole random system, maybe I will make one in a future when everything else is done and I have time
-            Random_Amount_Eggs = random.choice(Possible_Amount_Eggs)
-            Inventory[3]['amount'] += Random_Amount_Eggs
-            self.Next_Egg_Spawn_Update = Get_Time + Egg_Spawn_Delay
-
-Chick_NPC = Chicken_Class(0, 0, Chick_Img, 1)
+Chick_NPC = Chicken_Class(0,0, Chick_Img, 1, 50)
 
 Chickens = pygame.sprite.Group()
 Chickens.add(Chick_NPC)
@@ -500,8 +501,6 @@ def main():
 
         Screen.fill(('white'))
 
-        Chick_NPC.idle_egg_spawn()
-
         #Counters_UI.update()
         #Counters_UI.draw(Screen)
         Counters_Text()
@@ -513,6 +512,8 @@ def main():
         pygame.Surface.blit(Screen, Nest_Surface_3, (486, 82))
 
         Chickens.update()
+        Chicken_Class_Objects_Update()
+        Hunger_Points_Counter_Text()
 
         System_Buttons.update()
         System_Buttons.draw(Screen)

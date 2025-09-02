@@ -16,6 +16,13 @@ This repo is for my finall assignment for my python cource in university. This i
 
 # Devlog
 ## [Public Kanban board](https://planet-nose-f59.notion.site/TB1-FA-Chick-Farm-22c380ac3809803ebdbbcf0d9b368ae9?source=copy_link)
+## Sep 02th 2025
+- Chicken Class was separated from main game file.
+- Containers (i.e. Catalogue, Shop Cart, Sell Cart and Inventory) were separated into a different file called Inventory.py
+- Added hunger and feed functions. Gone the days of prosperity and abundance of food, your chicks now get hungry overtime and will stop hatching eggs once their HP (hunger points) reach 1!
+- Updated Nests dict, the spawn function and health display function (this almost killed me mentally)
+Known bugs:
+- Sometimes chicken spawns with 1 hp instead of 50
 ## Aug 29th 2025
 - Added proper window button manager. Before player was able to click buttons that were invisible, but still clickable. For example: Market and Shop windows exit button have the same position, when you tried to leave either of these two windows, you would actually click both buttons at the same time. Now it's fixed!
 - Changed Button class, added a parameter which tracks if button can be clicked, accompanied by a function and a variable that both track current window.
