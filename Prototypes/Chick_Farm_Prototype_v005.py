@@ -126,15 +126,18 @@ def Buttons_State_Checker(sprite_group, class_name, window): # checks which spri
 # Shop support functions
 def Add_To_Cart(item_name):
     global  Shop_Catalogue, Shop_Cart
-    for item in Shop_Cart:
-        final_item_price = item['amount'] * item['value']
-        if item['item name'] == item_name and final_item_price <= Inventory[4]['amount']:
-            item['amount'] += 1
+    total = sum(item["amount"] * item['value'] for item in Shop_Cart)
+    for cart_item in Shop_Cart:
+        if cart_item['item name'] == item_name:
+            final_total = total + cart_item['value']
+            if final_total <= Inventory[4]['amount']:
+                cart_item['amount'] += 1
             return
-    for item in Shop_Catalogue:
-        if item['item name'] == item_name and final_item_price <= Inventory[4]['amount']:
-            Shop_Cart.append({"item name": item["item name"], "value": item["value"], "amount": 1})
-            return
+    for shop_item in Shop_Catalogue:
+        if shop_item['item name'] == item_name:
+            if shop_item['value'] <= Inventory[4]['amount']:
+                Shop_Cart.append({"item name": shop_item["item name"], "value": shop_item["value"], "amount": 1})
+                return
 
 def Remove_From_Cart(item_name):
     global Shop_Catalogue, Shop_Cart
