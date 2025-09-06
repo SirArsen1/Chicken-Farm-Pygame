@@ -1,5 +1,5 @@
 import pygame, random
-from Inventory import Inventory
+from Inventory import Inventory, Score
 
 class Chicken_Class(pygame.sprite.Sprite):
     def __init__(self, x, y, image, scale, max_hp, egg_spawn: bool = False):
@@ -19,7 +19,7 @@ class Chicken_Class(pygame.sprite.Sprite):
     def set_idle_egg_spawn_False(self):
         self.egg_spawn = False
     def idle_egg_spawn(self):
-        global Inventory
+        global Inventory, Score
 
         Egg_Spawn_Delay = 5000  # egg spawn, short for testing purpose, change later
         Get_Time = pygame.time.get_ticks()
@@ -31,6 +31,7 @@ class Chicken_Class(pygame.sprite.Sprite):
             Possible_Amount_Eggs = (1, 0, 2, 0, 3) # zeroes added to introduce randomness into the spawn, without creating a whole random system, maybe I will make one in a future when everything else is done and I have time
             Random_Amount_Eggs = random.choice(Possible_Amount_Eggs)
             Inventory[3]['amount'] += Random_Amount_Eggs
+            Score['points'] += 1
             self.Next_Egg_Spawn_Update = Get_Time + Egg_Spawn_Delay
 
     # Hunger system

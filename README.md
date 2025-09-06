@@ -16,9 +16,13 @@ This repo is for my finall assignment for my python cource in university. This i
 
 # Devlog
 ## [Public Kanban board](https://planet-nose-f59.notion.site/TB1-FA-Chick-Farm-22c380ac3809803ebdbbcf0d9b368ae9?source=copy_link)
+## Sep 06th 2025
+- Overhaul of UI
+- Change in item names
+- Introducing Score feature ![img.png](img.png)
 ## Sep 03th 2025
 - Small patch, reworked the add to shop cart feature, now it won't let player add more than they can afford.
-- Next update is planned to introduce long awaited (by me at least), graphic refinement of this project.
+- Next update is planned to introduce long awaited (by me at least), visual overhaul of this project.
 ## Sep 02th 2025
 - Chicken Class was separated from main game file.
 - Containers (i.e. Catalogue, Shop Cart, Sell Cart and Inventory) were separated into a different file called Inventory.py
