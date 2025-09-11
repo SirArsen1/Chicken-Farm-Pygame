@@ -16,6 +16,12 @@ This repo is for my finall assignment for my python cource in university. This i
 
 # Devlog
 ## [Public Kanban board](https://planet-nose-f59.notion.site/TB1-FA-Chick-Farm-22c380ac3809803ebdbbcf0d9b368ae9?source=copy_link)
+## Sep 11th 2025
+- Rolling out pre-release version, likely it's THE release version, since I won't have much time to work on this game, reasons being other uni assignments.
+- Introducing save/load feature (though incomplete, it does the job mostly)
+- New window: Menu, in which player can save game, load previous save and exit the game
+- Inventories and other containers moved back in main file
+- Some Chicken class functions were brought to main file 
 ## Sep 06th 2025
 - Overhaul of UI
 - Change in item names

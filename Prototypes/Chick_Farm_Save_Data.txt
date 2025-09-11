@@ -1,0 +1,68 @@
+[
+    {
+        "inventory_data": [
+            {
+                "item name": "Food",
+                "value": 2,
+                "amount": 0
+            },
+            {
+                "item name": "Chicken",
+                "value": 8,
+                "amount": 1
+            },
+            {
+                "item name": "Meat",
+                "value": 5,
+                "amount": 0
+            },
+            {
+                "item name": "Eggs",
+                "value": 1,
+                "amount": 0
+            },
+            {
+                "item name": "Money",
+                "value": 1,
+                "amount": 10
+            }
+        ]
+    },
+    {
+        "score_data": {
+            "points": 0
+        }
+    },
+    {
+        "chicken_hp_data": [
+            {
+                "chicken_hp": 26
+            },
+            {
+                "chicken_hp": 30
+            },
+            {
+                "chicken_hp": null
+            }
+        ]
+    },
+    {
+        "nests_data": [
+            {
+                "occupied": true,
+                "object": true,
+                "visibility": true
+            },
+            {
+                "occupied": true,
+                "object": true,
+                "visibility": true
+            },
+            {
+                "occupied": false,
+                "object": false,
+                "visibility": false
+            }
+        ]
+    }
+]

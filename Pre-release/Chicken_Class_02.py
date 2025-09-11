@@ -1,5 +1,4 @@
 import pygame, random
-from Inventory import Inventory, Score
 
 class Chicken_Class(pygame.sprite.Sprite):
     def __init__(self, x, y, image, scale, hp, egg_spawn: bool = False):
@@ -13,26 +12,26 @@ class Chicken_Class(pygame.sprite.Sprite):
         self.hunger_level = hp
         self.egg_spawn = egg_spawn
 
-    # Egg spawn system
-    def set_idle_egg_spawn_True(self):
-        self.egg_spawn = True
-    def set_idle_egg_spawn_False(self):
-        self.egg_spawn = False
-    def idle_egg_spawn(self):
-        global Inventory, Score
-
-        Egg_Spawn_Delay = 5000  # egg spawn, short for testing purpose, change later
-        Get_Time = pygame.time.get_ticks()
-
-        if not hasattr(self, "Next_Egg_Spawn_Update"):
-            self.Next_Egg_Spawn_Update = Get_Time + 5000
-
-        if self.egg_spawn == True and (self.Next_Egg_Spawn_Update < Get_Time):
-            Possible_Amount_Eggs = (1, 0, 2, 0, 3) # zeroes added to introduce randomness into the spawn, without creating a whole random system, maybe I will make one in a future when everything else is done and I have time
-            Random_Amount_Eggs = random.choice(Possible_Amount_Eggs)
-            Inventory[3]['amount'] += Random_Amount_Eggs
-            Score['points'] += 1
-            self.Next_Egg_Spawn_Update = Get_Time + Egg_Spawn_Delay
+    # # Egg spawn system
+    # def set_idle_egg_spawn_True(self):
+    #     self.egg_spawn = True
+    # def set_idle_egg_spawn_False(self):
+    #     self.egg_spawn = False
+    # def idle_egg_spawn(self):
+    #     global Inventory, Score
+    #
+    #     Egg_Spawn_Delay = 5000  # egg spawn, short for testing purpose, change later
+    #     Get_Time = pygame.time.get_ticks()
+    #
+    #     if not hasattr(self, "Next_Egg_Spawn_Update"):
+    #         self.Next_Egg_Spawn_Update = Get_Time + 5000
+    #
+    #     if self.egg_spawn == True and (self.Next_Egg_Spawn_Update < Get_Time):
+    #         Possible_Amount_Eggs = (1, 0, 2, 0, 3) # zeroes added to introduce randomness into the spawn, without creating a whole random system, maybe I will make one in a future when everything else is done and I have time
+    #         Random_Amount_Eggs = random.choice(Possible_Amount_Eggs)
+    #         Inventory[3]['amount'] += Random_Amount_Eggs
+    #         Score['points'] += 1
+    #         self.Next_Egg_Spawn_Update = Get_Time + Egg_Spawn_Delay
 
     # Hunger system
     def hunger_meter_decrease(self):
@@ -50,7 +49,6 @@ class Chicken_Class(pygame.sprite.Sprite):
                 self.egg_spawn = False
 
     def hunger_meter_increase(self):
-        global Inventory
 
         if self.hunger_level < self.max_hp: #max hunger, set to 50 for now
             self.hunger_level = self.max_hp

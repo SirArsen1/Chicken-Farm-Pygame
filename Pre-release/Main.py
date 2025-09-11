@@ -1,7 +1,6 @@
-import pygame, random
+import pygame, random, json, sys
 from Button_Class_03 import Button_Class
 from Chicken_Class_02 import Chicken_Class
-from Inventory import Shop_Catalogue, Shop_Cart, Sell_Cart, Inventory, Score
 
 pygame.init()
 
@@ -17,34 +16,40 @@ Font_Name = 'VT323'  # Font used in the game
 
 # Images for sprites and other graphic elements
 ## Main
-Exit_Img = img('Assets/UI batch 03/Quit_Btn.png').convert_alpha()
-Chick_Img = img('Assets/Aseprite files/Chicken.png').convert_alpha()
-Add_Chick_Img = img('Assets/UI batch 03/Add_Btn.png').convert_alpha()
-Kill_Chick_Img = img('Assets/UI batch 03/Kill_Btn.png').convert_alpha()
-Shop_Btn_Img = img('Assets/UI batch 03/Shop_Btn.png').convert_alpha()
-Market_Btn_Img = img('Assets/UI batch 03/Market_Btn.png').convert_alpha()
-Inventory_Btn_Img = img('Assets/UI batch 03/Inventory_Btn.png').convert_alpha()
-Feed_Btn_Img = img('Assets/UI batch 03/Feed_Btn.png').convert_alpha()
-Main_Screen_BG_Img = img('Assets/UI batch 03/Main_BG.png').convert_alpha()
+Chick_Img = img('Assets/UI/Chicken.png').convert_alpha()
+Add_Chick_Img = img('Assets/UI/Main_Screen_UI/Add_Btn.png').convert_alpha()
+Kill_Chick_Img = img('Assets/UI/Main_Screen_UI/Kill_Btn.png').convert_alpha()
+Shop_Btn_Img = img('Assets/UI/Main_Screen_UI/Shop_Btn.png').convert_alpha()
+Market_Btn_Img = img('Assets/UI/Main_Screen_UI/Market_Btn.png').convert_alpha()
+Inventory_Btn_Img = img('Assets/UI/Main_Screen_UI/Inventory_Btn.png').convert_alpha()
+Feed_Btn_Img = img('Assets/UI/Main_Screen_UI/Feed_Btn.png').convert_alpha()
+Main_Screen_BG_Img = img('Assets/UI/Main_Screen_UI/Main_BG.png').convert_alpha()
+Menu_Btn_Img = img('Assets/UI/Main_Screen_UI/Menu_Btn.png').convert_alpha()
+## Menu
+Save_Btn_Img = img('Assets/UI/Menu_UI/Save_Btn.png').convert_alpha()
+Load_Btn_Img = img('Assets/UI/Menu_UI/Load_Btn.png').convert_alpha()
+Exit_Btn_Img = img('Assets/UI/Menu_UI/Exit_Btn.png').convert_alpha()
+Menu_BG_Img = img('Assets/UI/Menu_UI/Menu_BG.png').convert_alpha()
+Menu_Window_Img = img('Assets/UI/Menu_UI/Menu_Window_Clean.png').convert_alpha()
 ## Shop
-Shop_Window_Img = img('Assets/UI batch 03/Shop_Window_Clean.png').convert_alpha()
-Buy_Btn_Img = img('Assets/UI batch 03/Buy_Btn.png').convert_alpha()
-Shop_BG_Img = img('Assets/UI batch 03/Shop_BG.png').convert_alpha()
+Shop_Window_Img = img('Assets/UI/Shop_UI/Shop_Window_Clean.png').convert_alpha()
+Buy_Btn_Img = img('Assets/UI/Shop_UI/Buy_Btn.png').convert_alpha()
+Shop_BG_Img = img('Assets/UI/Shop_UI/Shop_BG.png').convert_alpha()
 ## Inventory
-Inventory_Window_Img = img('Assets/UI batch 03/Inventory_Window_Clean.png').convert_alpha()
-Inventory_BG_Img = img('Assets/UI batch 03/Inventory_BG.png').convert_alpha()
+Inventory_Window_Img = img('Assets/UI/Inventory_UI/Inventory_Window_Clean.png').convert_alpha()
+Inventory_BG_Img = img('Assets/UI/Inventory_UI/Inventory_BG.png').convert_alpha()
 ## Market
-Market_Window_Clean_Img = img('Assets/UI batch 03/Market_Window_Clean.png').convert_alpha()
-Market_BG_Img = img('Assets/UI batch 03/Market_BG.png').convert_alpha()
-Sell_Btn_Img = img('Assets/UI batch 03/Sell_Btn.png').convert_alpha()
+Market_Window_Clean_Img = img('Assets/UI/Market_UI/Market_Window_Clean.png').convert_alpha()
+Market_BG_Img = img('Assets/UI/Market_UI/Market_BG.png').convert_alpha()
+Sell_Btn_Img = img('Assets/UI/Market_UI/Sell_Btn.png').convert_alpha()
 ## General purpose
-Close_Window_Btn_Img = img('Assets/UI batch 03/Close_Btn.png').convert_alpha()
-Add_to_cart_Btn_Img = img('Assets/UI batch 03/Add_Cart_Btn.png').convert_alpha()
-Remove_from_cart_Btn_Img = img('Assets/UI batch 03/Remove_Cart_Btn.png').convert_alpha()
-Chick_Icon_Img = img('Assets/UI batch 03/Chick_Icon.png').convert_alpha()
-Food_Icon_Img = img('Assets/UI batch 03/Food_Icon.png').convert_alpha()
-Meat_Icon_Img = img('Assets/UI batch 03/Meat_Icon.png').convert_alpha()
-Eggs_Icon_Img = img('Assets/UI batch 03/Eggs_Icon.png').convert_alpha()
+Close_Window_Btn_Img = img('Assets/UI/Close_Btn.png').convert_alpha()
+Add_to_cart_Btn_Img = img('Assets/UI/Add_Cart_Btn.png').convert_alpha()
+Remove_from_cart_Btn_Img = img('Assets/UI/Remove_Cart_Btn.png').convert_alpha()
+Chick_Icon_Img = img('Assets/UI/Icons/Chick_Icon.png').convert_alpha()
+Food_Icon_Img = img('Assets/UI/Icons/Food_Icon.png').convert_alpha()
+Meat_Icon_Img = img('Assets/UI/Icons/Meat_Icon.png').convert_alpha()
+Eggs_Icon_Img = img('Assets/UI/Icons/Eggs_Icon.png').convert_alpha()
 # Custom sprites
 ## Custom sprite class for blank windows, that work as paddings for text
 class Custom_Sprite(pygame.sprite.Sprite): #should I separate all classes into separate file?
@@ -55,6 +60,9 @@ class Custom_Sprite(pygame.sprite.Sprite): #should I separate all classes into s
         self.rect.topleft = (x, y)
 ## Main
 Main_Screen_BG = Custom_Sprite(Main_Screen_BG_Img, 0, 0)
+## Menu
+Menu_Window = Custom_Sprite(Menu_Window_Img, 208, 48)
+Menu_BG = Custom_Sprite(Menu_BG_Img, 0, 0)
 ## Shop
 Shop_Window = Custom_Sprite(Shop_Window_Img, 180, 55)
 Shop_BG = Custom_Sprite(Market_BG_Img, 0, 0)
@@ -74,13 +82,19 @@ Meat_Icon_Market = Custom_Sprite(Meat_Icon_Img, 196, 116)
 Eggs_Icon_Market = Custom_Sprite(Eggs_Icon_Img, 196, 158)
 # Buttons
 ## Main screen buttons
-Exit_Btn = Button_Class(8, 8, Exit_Img, 1)
+#Exit_Btn = Button_Class(8, 8, Exit_Img, 1)
 Add_Chick_Btn = Button_Class(13, 281, Add_Chick_Img, 1)
 Kill_Chick_Btn = Button_Class(185, 281, Kill_Chick_Img, 1)
 Feed_Btn = Button_Class(357, 281, Feed_Btn_Img, 1)
 Shop_Btn = Button_Class(529, 281, Shop_Btn_Img, 1)
 Market_Btn = Button_Class(591, 281, Market_Btn_Img, 1)
 Inv_Btn = Button_Class(653, 281, Inventory_Btn_Img, 1)
+Menu_Btn = Button_Class(8, 8, Menu_Btn_Img, 1)
+## Menu window controls
+Save_Game_Btn = Button_Class(253, 124, Save_Btn_Img, 1)
+Load_Game_Btn = Button_Class(253, 184, Load_Btn_Img, 1)
+Exit_Game_Btn = Button_Class(253, 244, Exit_Btn_Img, 1)
+Close_Menu_Window_Btn = Button_Class(224, 58, Close_Window_Btn_Img, 1)
 ## Shop window controls
 Add_Chicken_to_cart_Btn = Button_Class(460, 115, Add_to_cart_Btn_Img, 1)
 Add_Food_to_cart_Btn = Button_Class(460, 157, Add_to_cart_Btn_Img, 1)
@@ -103,7 +117,10 @@ Close_Inv_Btn = Button_Class(224, 51, Close_Window_Btn_Img, 1)
 Main_BG = pygame.sprite.Group()
 Main_BG.add(Main_Screen_BG)
 Main_Screen_UI = pygame.sprite.Group()
-Main_Screen_UI.add( Exit_Btn, Add_Chick_Btn, Kill_Chick_Btn, Shop_Btn, Market_Btn, Inv_Btn, Feed_Btn)
+Main_Screen_UI.add( Menu_Btn, Add_Chick_Btn, Kill_Chick_Btn, Shop_Btn, Market_Btn, Inv_Btn, Feed_Btn)
+## Meny window sprite group
+Menu_Window_UI = pygame.sprite.Group()
+Menu_Window_UI.add(Menu_BG, Menu_Window, Save_Game_Btn, Load_Game_Btn, Exit_Game_Btn, Close_Menu_Window_Btn)
 ## Shop window sprite group
 Shop_Window_UI = pygame.sprite.Group()
 Shop_Window_UI.add(Shop_BG, Shop_Window, Add_Chicken_to_cart_Btn, Add_Food_to_cart_Btn, Remove_Chicken_to_cart_Btn, Remove_Food_to_cart_Btn, Close_Shop_Window_Btn, Buy_Btn, Chick_Icon_Shop, Food_Icon_Shop)
@@ -118,14 +135,64 @@ Inventory_Window_UI.add(Inventory_BG, Inventory_Window, Close_Inv_Btn, Eggs_Icon
 Nest_Surface_1 = pygame.Surface((192, 192), flags=pygame.SRCALPHA)
 Nest_Surface_2 = pygame.Surface((192, 192), flags=pygame.SRCALPHA)
 Nest_Surface_3 = pygame.Surface((192, 192), flags=pygame.SRCALPHA)
-# Nest Surface dict with custom "flag"
+# Nest Surface dict with custom flags
 Nest_Surfaces = [ # occupied is a check whether the surface is taken by chicken sprite
     {"surface":Nest_Surface_1, "occupied":False, "object":None, "visibility":False, "hp_pos":(114,79)},
     {"surface":Nest_Surface_2, "occupied":False, "object":None, "visibility":False, "hp_pos":(336,79)},
     {"surface":Nest_Surface_3, "occupied":False, "object":None, "visibility":False, "hp_pos":(558,79)}
 ]
+# Nest surface data that extracts json friendly data for save file
+def Get_Nest_Data():
+    Nest_Data = []
+
+    for nest in Nest_Surfaces:
+        new_dict = {}
+
+        new_dict["occupied"] = nest["occupied"]
+        if nest['object'] is not None:
+            new_dict["object"] = True
+        else:
+            new_dict["object"] = False
+        new_dict["visibility"] = nest["visibility"]
+
+        Nest_Data.append(new_dict)
+
+    return Nest_Data
+
+# Chicken HPs
+Chicken_HP = [
+    {'chicken_hp': None},
+    {'chicken_hp': None},
+    {'chicken_hp': None}
+]
+# Shop's catalogue
+Shop_Catalogue = [
+    {"item name":"Food", "value":2, "amount":9999},
+    {"item name":"Chicken", "value":8, "amount":9999},
+]
+# Shop cart, a transition state between Catalogue and Inventory
+Shop_Cart = [
+    {"item name":"Food", "value":2, "amount":0},
+    {"item name":"Chicken", "value":8, "amount":0},
+]
+# Sell cart, where player puts items for sale, before selling them
+Sell_Cart = [
+    {"item name":"Meat", "value":5, "amount":0},
+    {"item name":"Eggs", "value":1, "amount":0},
+]
+# Inventory
+Inventory = [   # Using indexes is uncomfortable buuuut I just want to make the game playable first, maybe then I will work on readability
+    {"item name":"Food", "value":2, "amount":0}, #0
+    {"item name":"Chicken", "value":8, "amount":3}, #1
+    {"item name":"Meat", "value":5, "amount":0}, #2
+    {"item name":"Eggs", "value":1, "amount":0}, #3
+    {"item name":"Money", "value":1, "amount":10}, #4
+]
+# Score
+Score = {'points': 0}
 
 # Bools for running a game
+Menu_Open = False
 Inventory_Open = False
 Shop_Open = False
 Market_Open = False
@@ -142,6 +209,14 @@ def Buttons_State_Checker(sprite_group, class_name, window): # checks which spri
     for sprite in sprite_group:
         if isinstance(sprite, class_name):
             sprite.locked = (Current_Window != window)
+
+# Save data support functions
+def Chicken_HP_Tracker():
+    global Chicken_HP
+    for i, nest in enumerate(Nest_Surfaces):
+        if nest['object'] is not None and nest['visibility']:
+            Chicken_HP[i][f'chicken_hp'] = nest['object'].hunger_level
+            #print(Chicken_HP)
 
 # Shop support functions
 def Add_To_Cart(item_name):
@@ -185,7 +260,7 @@ def Buy_From_Cart():
                         cart_item ['amount'] = 0
                         break
 
-                print('money taken')
+                #print('money taken')
 
 # Market support functions
 def Add_To_Sell_Cart(item_name, required_amount): # Right now it can add infinite amount of items instead of tracking the inventory
@@ -193,7 +268,7 @@ def Add_To_Sell_Cart(item_name, required_amount): # Right now it can add infinit
     for inv_item in Inventory:
         if inv_item['item name'] == item_name:
             if inv_item['amount'] < required_amount:
-                print("no item to sell")
+                #print("no item to sell")
                 return
 
             inv_item['amount'] -= required_amount
@@ -201,7 +276,7 @@ def Add_To_Sell_Cart(item_name, required_amount): # Right now it can add infinit
             for sell_item in Sell_Cart:
                 if sell_item['item name'] == item_name:
                     sell_item['amount'] += required_amount
-                    print ('item put to sale')
+                    #print ('item put to sale')
                     return
 
             Sell_Cart.append({"item name": item_name, "value": inv_item['value'], "amount": required_amount})
@@ -220,11 +295,11 @@ def Remove_From_Sell_Cart(item_name, required_amount):
                     if inv_item['item name'] == item_name:
                         if sell_item['amount'] > 0:
                             inv_item['amount'] += required_amount
-                            print('item returned')
+                            #print('item returned')
                             return
 
                         inv_item['amount'] += required_amount
-                        print('item returned')
+                        #print('item returned')
 
                 Inventory.append({"item name": item_name, "value": inv_item['value'], "amount": required_amount})
 
@@ -235,9 +310,9 @@ def Sell_All_From_Sell_Cart():
         Inventory[4]['amount'] += Final_Price
         sell_item['amount'] = 0
         Score['points'] += Final_Price // 4
-        print("items sold")
+        #print("items sold")
 
-# Chicken spawn logic
+# Chicken logic
 def Chicken_Spawn(): #Should make a unique chicken everytime used and conditions are met
     global Inventory, Nest_Surfaces
 
@@ -246,7 +321,7 @@ def Chicken_Spawn(): #Should make a unique chicken everytime used and conditions
 
             nest['object'] = Chicken_Class(0, 0, Chick_Img, 1, 30)
             nest['visibility'] = True
-            nest['object'].set_idle_egg_spawn_True()
+            set_idle_egg_spawn_True()
             nest['occupied'] = True
 
             Chickens.add(nest['object'])
@@ -254,7 +329,7 @@ def Chicken_Spawn(): #Should make a unique chicken everytime used and conditions
             pygame.display.update()
 
             Inventory[1]["amount"] -= 1
-            print("chic added")
+            #print("chic added")
             return
 
 def Chicken_Remove():
@@ -263,7 +338,7 @@ def Chicken_Remove():
     for nest in Nest_Surfaces:
         if nest["occupied"] and nest["object"] is not None:
 
-            nest["object"].set_idle_egg_spawn_False()
+            set_idle_egg_spawn_False()
 
             nest["object"] = None
             nest["visibility"] = False
@@ -273,32 +348,135 @@ def Chicken_Remove():
             pygame.display.update()
 
             Inventory[2]['amount'] += 1
-            print("chic delete")
+            #print("chic delete")
             return
 
 def Chicken_Class_Objects_Update():
     for chicken in Nest_Surfaces:
         if chicken['object'] != None:
-            chicken['object'].idle_egg_spawn()
+            idle_egg_spawn()
             chicken['object'].hunger_meter_decrease()
+
+# Egg spawn system
+def set_idle_egg_spawn_True():
+    for nest in Nest_Surfaces:
+        if nest['object'] is not None:
+            nest['object'].egg_spawn = True
+
+def set_idle_egg_spawn_False():
+    for nest in Nest_Surfaces:
+        if nest['object'] is not None:
+            nest['object'].egg_spawn = False
+
+def idle_egg_spawn():
+    global Inventory, Score
+
+    for nest in Nest_Surfaces:
+        class_object = nest['object']
+        if class_object is None:
+            continue
+
+        Egg_Spawn_Delay = 5000  # short for testing purpose
+        Get_Time = pygame.time.get_ticks()
+
+        if not hasattr(class_object, "Next_Egg_Spawn_Update"):
+            class_object.Next_Egg_Spawn_Update = Get_Time + Egg_Spawn_Delay
+
+        if class_object.egg_spawn and (class_object.Next_Egg_Spawn_Update < Get_Time):
+            Possible_Amount_Eggs = (1, 0, 2, 0, 3)  # randomness
+            Random_Amount_Eggs = random.choice(Possible_Amount_Eggs)
+            Inventory[3]['amount'] += Random_Amount_Eggs
+            Score['points'] += 1
+            class_object.Next_Egg_Spawn_Update = Get_Time + Egg_Spawn_Delay
 
 # Buttons functions
 def Button_Logic():
-    global Run, Inventory, Shop_Open, Inventory_Open, Market_Open, Current_Window, HP_Text_Visibility, Score
-    # Main screen menu buttons
-    if Exit_Btn.draw(Screen):
-        Run = False
+    global Run, Inventory, Shop_Open, Inventory_Open, Market_Open, Menu_Open, Current_Window, HP_Text_Visibility, Score, Nest_Surfaces_Data, Chicken_HP, Chicken_Class
+    # Main screen
     if Add_Chick_Btn.draw(Screen):
         Chicken_Spawn()
     if Kill_Chick_Btn.draw(Screen):
         Chicken_Remove()
         Score['points'] += 1
+    if Feed_Btn.draw(Screen):
+        if Inventory[0]['amount'] > 0:
+            Inventory[0]['amount'] -= 1
+            for chicken in Nest_Surfaces:
+                if chicken['object'] != None:
+                    chicken['object'].hunger_meter_increase()
+                    Score['points'] += 1
+            #print('chicken being fed')
+            return
+
+    # Menu
+    if Menu_Btn.draw(Screen):
+        Menu_Open = True
+        Current_Window = "Menu"
+        #print(Current_Window)
+        #print("Menu opened")
+
+    if Save_Game_Btn.draw(Screen):
+        Save_Data = [
+            {'inventory_data': Inventory},
+            {'score_data': Score},
+            {'chicken_hp_data': Chicken_HP},
+            {'nests_data': Get_Nest_Data()}
+        ]
+
+        with open('save_data.txt', 'w') as data_file:
+            json.dump(Save_Data, data_file, indent=4)
+            #print(Save_Data)
+            #print('saved')
+    if Load_Game_Btn.draw(Screen):
+        try:
+            with open('save_data.txt') as data_file:
+                loaded_data = json.load(data_file)
+                #print('loaded')
+
+            Inventory = loaded_data[0]['inventory_data']
+            Score = loaded_data[1]['score_data']
+            Chicken_HP = loaded_data[2]['chicken_hp_data']
+
+            nest_data = loaded_data[3]['nests_data']
+
+            if nest_data:
+                for i, nest in enumerate(Nest_Surfaces):
+                    nest['occupied'] = nest_data[i]['occupied']
+                    nest['visibility'] = nest_data[i]['visibility']
+
+                    if nest_data[i]['object']:
+                        nest['object'] = Chicken_Class(0, 0, Chick_Img, 1, 30)
+                        set_idle_egg_spawn_True()
+
+                        #print(nest['object'].hunger_level)
+
+                        for data in Chicken_HP: # IT DOESNT WORK BUT THE DEADLINE IS CLOSE AND I NEED TO WRITE A PAPER, SO will fix it later
+                            if nest['object'] is not None and data['chicken_hp'] is not None:
+                                nest['object'].hunger_level = data['chicken_hp']
+
+                                Chickens.add(nest['object'])
+                                Chickens.draw(nest["surface"])
+
+                                #print(nest['object'].hunger_level)
+
+                    else:
+                        nest['object'] = None
+
+        except FileNotFoundError:
+            print('No file created yet')
+
+    if Exit_Game_Btn.draw(Screen):
+        Run = False
+    if Close_Menu_Window_Btn.draw(Screen):
+        Menu_Open = False
+        Current_Window = "Main"
+
     # Shop
     if Shop_Btn.draw(Screen):
         Shop_Open = True
         Current_Window = "Shop"
-        print(Current_Window)
-        print("Shop opened")
+        #print(Current_Window)
+        #print("Shop opened")
     if Close_Shop_Window_Btn.draw(Screen):
         Shop_Open = False
         Current_Window = "Main"
@@ -318,26 +496,28 @@ def Button_Logic():
         print("Removed Food")
     if Buy_Btn.draw(Screen):
         Buy_From_Cart()
-        print("Item bought")
+        #print("Item bought")
         pass
+
     # Inventory
     if Inv_Btn.draw(Screen):
         Inventory_Open = True
         Current_Window = "Inventory"
-        print ("Inventory opened")
+        #print ("Inventory opened")
     if Close_Inv_Btn.draw(Screen):
         Inventory_Open = False
         Current_Window = "Main"
-        print("Inventory closed")
+        #print("Inventory closed")
+
     # Market
     if Market_Btn.draw(Screen):
         Market_Open = True
         Current_Window = "Market"
-        print("Market opened")
+        #print("Market opened")
     if Close_Market_Window_Btn.draw(Screen):
         Market_Open = False
         Current_Window = "Main"
-        print("Market closed")
+        #print("Market closed")
     if Add_Meat_to_Sell_Btn.draw(Screen):
         Add_To_Sell_Cart("Meat", 1)
         #print("Put to sell Chicken")
@@ -352,16 +532,6 @@ def Button_Logic():
         #print("Removed Food")
     if Sell_Btn.draw(Screen):
         Sell_All_From_Sell_Cart()
-
-    if Feed_Btn.draw(Screen):
-        if Inventory[0]['amount'] > 0:
-            Inventory[0]['amount'] -= 1
-            for chicken in Nest_Surfaces:
-                if chicken['object'] != None:
-                    chicken['object'].hunger_meter_increase()
-                    Score['points'] += 1
-            print('chicken being fed')
-            return
 
 # Text functions
 def Counters_Text():
@@ -389,6 +559,17 @@ def Counters_Text():
     Screen.blit(Chicken_Counter_Text, (291, 20))
     Screen.blit(Bank_Wallet_Counter_Text, (418, 20))
     Screen.blit(Score_Counter_Text, (573, 20))
+
+def Menu_Window_Text():
+    global Font_Name
+
+    H1_Font_Size = 44
+    H1_Font = pygame.font.SysFont(Font_Name, H1_Font_Size)
+
+    # Window title
+    Menu_Window_Tile = H1_Font.render(f'MENU', True, ('black'))
+
+    Screen.blit(Menu_Window_Tile, (325, 52))
 
 def Shop_Window_Text():
     global Shop_Catalogue, Shop_Cart, Font_Name
@@ -504,7 +685,7 @@ def Inventory_Window_Text():
     Screen.blit(Body_Name_Money, (285, 272))
     Screen.blit(Body_Line5_Money, (371, 272))
 
-def Hunger_Points_Counter_Text():
+def Hunger_Points_Counter_Text(): #HP do not appear when loading chicken from save data
     global Chicken_Class, Nest_Surfaces
 
     Font_Size = 32
@@ -542,6 +723,7 @@ def main():
         pygame.Surface.blit(Screen, Nest_Surface_3, (486, 82))
 
         Chickens.update()
+        Chicken_HP_Tracker()
         Chicken_Class_Objects_Update()
         Hunger_Points_Counter_Text()
 
@@ -569,6 +751,12 @@ def main():
             Market_Window_UI.draw(Screen)
             Market_Window_Text()
         Buttons_State_Checker(Market_Window_UI, Button_Class, "Market")
+
+        if Menu_Open:
+            Menu_Window_UI.update()
+            Menu_Window_UI.draw(Screen)
+            Menu_Window_Text()
+        Buttons_State_Checker(Menu_Window_UI, Button_Class, "Menu")
 
         pygame.display.update()
         fps = 60
