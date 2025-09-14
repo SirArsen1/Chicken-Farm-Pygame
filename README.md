@@ -2,14 +2,14 @@
 ![Chicken](https://github.com/user-attachments/assets/941ef87d-ba01-4842-b073-2df205a73e13)
 
 ## About
-This repo is for my finall assignment for my python cource in university. This is a chicken farm game, fairly simple concept, pixel graphics. Game written in python using pygame.
+This repo is for my final assignment for my Python course in university. This is a chicken farm game, with a fairly simple concept and pixel graphics. Game written in Python using PyGame.
 
 ## Preparation 
 - Python 3.12.6
 - Pygame-ce 2.5.5
   `pip install pygame-ce`
 - Download the "Pre-elease" folder
-- Download the font from Font folder into your system
+- Download the font from the Font folder into your system
 - Execute the Main.py
 - Enjoy
 
