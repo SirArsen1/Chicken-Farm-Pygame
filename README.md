@@ -1,4 +1,4 @@
-# Chicken-Farm-Pygame (WIP!)
+# Chicken-Farm-Pygame (Development on hold)
 ![Chicken](https://github.com/user-attachments/assets/941ef87d-ba01-4842-b073-2df205a73e13)
 
 ## About
